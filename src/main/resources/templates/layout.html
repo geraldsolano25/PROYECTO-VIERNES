@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${titulo}">Legado Barbería</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link th:href="@{/css/estilos.css}" rel="stylesheet">
+</head>
+<body>
+
+<header class="bg-dark text-white text-center p-3">
+  <h1>Legado Barbería</h1>
+  <nav>
+    <a href="/" class="text-white mx-3">Inicio</a>
+    <a href="/servicios" class="text-white mx-3">Servicios</a>
+    <a href="/productos" class="text-white mx-3">Productos</a>
+    <a href="/contacto" class="text-white mx-3">Contacto</a>
+  </nav>
+</header>
+
+<main class="container mt-4">
+  <th:block th:replace="${contenido}"></th:block>
+</main>
+
+<footer class="bg-dark text-white text-center p-2 mt-4">
+  © 2025 Legado Barbería
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
