@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Legado Barbería - Servicios</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-       <style>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Legado Barbería - Servicios</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+        <style>
             :root {
                 --primary-color: #c9a96e;
                 --dark-color: #1a1a1a;
@@ -171,11 +171,16 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navmenu">
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
-                        <li class="nav-item"><a class="nav-link active" href="servicios.html">Servicios</a></li>
-                        <li class="nav-item"><a class="nav-link" href="productos.html">Productos</a></li>
-                        <li class="nav-item"><a class="nav-link" href="contacto.html">Contacto</a></li>
-                    </ul>
+                   <li class="nav-item"><a class="nav-link" th:href="@{/}">Inicio</a></li>
+                        <li class="nav-item px-2"><a class="nav-link" th:href="@{/servicios}">Servicios barbería</a></li>
+                        <li class="nav-item px-2"><a class="nav-link" th:href="@{/UbicacionHorarios}">Ubicación y Horarios</a></li>
+
+                        <li class="nav-item"><a class="nav-link" th:href="@{/productos}">Productos</a></li>
+
+                        <li class="nav-item"><a class="nav-link" th:href="@{/contacto}">Contacto</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/boletin}">Boletín</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/redes}">Redes Sociales</a></li>
+              </ul>
                 </div>
             </div>
         </nav>
@@ -194,12 +199,12 @@
                 <div class="col-md-4">
                     <div class="service-card">
                         <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1476&q=80" alt="Corte de cabello clásico" class="service-img">
-                        <div class="p-4">
-                            <div class="service-icon"><i class="fas fa-cut"></i></div>
-                            <h3 class="service-title">Corte Clásico</h3>
-                            <p>Nuestro corte tradicional con técnicas probadas que garantizan un resultado impecable y duradero.</p>
-                            <div class="price-tag">$10</div>
-                        </div>
+                            <div class="p-4">
+                                <div class="service-icon"><i class="fas fa-cut"></i></div>
+                                <h3 class="service-title">Corte Clásico</h3>
+                                <p>Nuestro corte tradicional con técnicas probadas que garantizan un resultado impecable y duradero.</p>
+                                <div class="price-tag">$10</div>
+                            </div>
                     </div>
                 </div>
 
@@ -216,7 +221,7 @@
 
                 <div class="col-md-4">
                     <div class="service-card">
-                       <div class="p-4">
+                        <div class="p-4">
                             <div class="service-icon"><i class="fas fa-user"></i></div>
                             <h3 class="service-title">Arreglo de Barba</h3>
                             <p>Dale forma y estilo a tu barba con nuestras técnicas de precisión y acabados perfectos.</p>
@@ -242,7 +247,7 @@
 
                 <div class="col-md-6">
                     <div class="service-card">
-                       <div class="p-4">
+                        <div class="p-4">
                             <div class="service-icon"><i class="fas fa-crown"></i></div>
                             <h3 class="service-title">Servicio Premium</h3>
                             <p>La experiencia completa: corte, afeitado, tratamiento capilar y masaje relajante.</p>

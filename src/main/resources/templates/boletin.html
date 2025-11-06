@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Legado Barbería - Boletín</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+        <style>
+            :root {
+                --primary-color: #c9a96e;
+                --dark-color: #1a1a1a;
+                --light-color: #f8f9fa;
+            }
+
+            body {
+                background-color: var(--dark-color);
+                color: var(--light-color);
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+
+            .navbar-brand {
+                font-weight: bold;
+                color: var(--primary-color) !important;
+            }
+
+            .nav-link {
+                color: var(--light-color) !important;
+                transition: color 0.3s;
+            }
+
+            .nav-link:hover {
+                color: var(--primary-color) !important;
+            }
+
+            .hero-newsletter {
+                background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1585747860715-2ba37e788b70?ixlib=rb-4.0.3&auto=format&fit=crop&w=1474&q=80');
+                background-size: cover;
+                background-position: center;
+                padding: 100px 0;
+                text-align: center;
+            }
+
+            .section-title {
+                color: var(--primary-color);
+                text-align: center;
+                margin-bottom: 40px;
+                position: relative;
+            }
+
+            .section-title:after {
+                content: '';
+                display: block;
+                width: 80px;
+                height: 3px;
+                background-color: var(--primary-color);
+                margin: 15px auto 0;
+            }
+
+            /* Estilos para la sección de suscripción */
+            .newsletter-section {
+                padding: 80px 0;
+                background-color: #1a1a1a;
+            }
+
+            .newsletter-card {
+                background-color: #2a2a2a;
+                border-radius: 10px;
+                padding: 50px;
+                border: 1px solid #444;
+                transition: transform 0.3s, box-shadow 0.3s;
+                max-width: 800px;
+                margin: 0 auto;
+                text-align: center;
+            }
+
+            .newsletter-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            }
+
+            .newsletter-icon {
+                font-size: 4rem;
+                color: var(--primary-color);
+                margin-bottom: 30px;
+            }
+
+            .newsletter-title {
+                color: var(--primary-color);
+                font-weight: bold;
+                margin-bottom: 20px;
+                font-size: 2rem;
+            }
+
+            .benefits-section {
+                padding: 60px 0;
+            }
+
+            .benefit-card {
+                background-color: #2a2a2a;
+                border-radius: 10px;
+                padding: 30px;
+                text-align: center;
+                height: 100%;
+                border: 1px solid #444;
+                transition: transform 0.3s;
+            }
+
+            .benefit-card:hover {
+                transform: translateY(-5px);
+            }
+
+            .benefit-icon {
+                font-size: 2.5rem;
+                color: var(--primary-color);
+                margin-bottom: 20px;
+            }
+
+            .subscription-count {
+                text-align: center;
+                color: var(--primary-color);
+                font-weight: bold;
+                margin-bottom: 30px;
+                font-size: 1.1rem;
+            }
+
+            .email-instructions {
+                background-color: #1a1a1a;
+                border-radius: 10px;
+                padding: 30px;
+                margin: 30px 0;
+                border-left: 4px solid var(--primary-color);
+            }
+
+            .step-number {
+                background-color: var(--primary-color);
+                color: var(--dark-color);
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+                margin-right: 15px;
+                flex-shrink: 0;
+            }
+
+            .instruction-step {
+                display: flex;
+                align-items: center;
+                margin-bottom: 25px;
+                text-align: left;
+            }
+
+            .instruction-step:last-child {
+                margin-bottom: 0;
+            }
+
+            .email-address {
+                background-color: var(--primary-color);
+                color: var(--dark-color);
+                padding: 10px 20px;
+                border-radius: 25px;
+                font-weight: bold;
+                font-size: 1.2rem;
+                display: inline-block;
+                margin: 15px 0;
+            }
+
+            .contact-detail {
+                font-size: 1.1rem;
+                margin-bottom: 10px;
+            }
+
+            .info-box {
+                background-color: #2a2a2a;
+                border-radius: 10px;
+                padding: 25px;
+                margin: 20px 0;
+                border: 1px solid #444;
+            }
+        </style>
+    </head>
+    <body class="bg-dark text-light">
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">Legado Barbería</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navmenu">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" th:href="@{/}">Inicio</a></li>
+                        <li class="nav-item px-2"><a class="nav-link" th:href="@{/servicios}">Servicios barbería</a></li>
+                        <li class="nav-item px-2"><a class="nav-link" th:href="@{/UbicacionHorarios}">Ubicación y Horarios</a></li>
+
+                        <li class="nav-item"><a class="nav-link" th:href="@{/productos}">Productos</a></li>
+
+                        <li class="nav-item"><a class="nav-link" th:href="@{/contacto}">Contacto</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/boletin}">Boletín</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/redes}">Redes Sociales</a></li>
+           </ul>
+                </div>
+            </div>
+        </nav>
+
+        <section class="hero-newsletter">
+            <div class="container">
+                <h1 class="display-4">Únete a Nuestro Boletín</h1>
+                <p class="lead">Mantente informado con nuestras promociones y novedades</p>
+            </div>
+        </section>
+
+        <main class="container my-5">
+            <!-- Sección de Beneficios -->
+            <section class="benefits-section">
+                <div class="container">
+                    <h2 class="section-title">Beneficios de Suscribirte</h2>
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="benefit-card">
+                                <div class="benefit-icon">
+                                    <i class="fas fa-tags"></i>
+                                </div>
+                                <h4>Promociones Exclusivas</h4>
+                                <p>Recibe descuentos especiales y ofertas antes que nadie</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="benefit-card">
+                                <div class="benefit-icon">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </div>
+                                <h4>Novedades Mensuales</h4>
+                                <p>Enterate primero de nuevos servicios y productos</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="benefit-card">
+                                <div class="benefit-icon">
+                                    <i class="fas fa-gift"></i>
+                                </div>
+                                <h4>Contenido Exclusivo</h4>
+                                <p>Tips de cuidado personal y tendencias de barbería</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección: Instrucciones de Suscripción -->
+            <section class="newsletter-section" id="suscripcion-boletin">
+                <div class="container">
+                    <h2 class="section-title">Cómo Suscribirte al Boletín</h2>
+
+                    <div class="subscription-count">
+                        <i class="fas fa-users me-2"></i>
+                        Más de 1,500 clientes ya reciben nuestras promociones
+                    </div>
+
+                    <div class="newsletter-card">
+                        <div class="newsletter-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <h3 class="newsletter-title">Suscríbete por Correo Electrónico</h3>
+                        <p class="mb-4">Envía un correo para unirte a nuestra lista de suscriptores</p>
+
+                        <div class="email-address">
+                            boletin@legadobarberia.cr
+                        </div>
+
+                        <div class="email-instructions">
+                            <div class="instruction-step">
+                                <div class="step-number">1</div>
+                                <div>
+                                    <h5>Abre tu aplicación de correo</h5>
+                                    <p class="mb-0">Usa Outlook, Gmail, Yahoo o cualquier cliente de correo</p>
+                                </div>
+                            </div>
+
+                            <div class="instruction-step">
+                                <div class="step-number">2</div>
+                                <div>
+                                    <h5>Envía un correo a nuestra dirección</h5>
+                                    <p class="mb-0">Escribe a: <strong>boletin@legadobarberia.cr</strong></p>
+                                </div>
+                            </div>
+
+                            <div class="instruction-step">
+                                <div class="step-number">3</div>
+                                <div>
+                                    <h5>Incluye la información requerida</h5>
+                                    <p class="mb-0">En el asunto escribe: "Suscripción al Boletín"</p>
+                                </div>
+                            </div>
+
+                            <div class="instruction-step">
+                                <div class="step-number">4</div>
+                                <div>
+                                    <h5>Espera nuestra confirmación</h5>
+                                    <p class="mb-0">Te enviaremos un email de bienvenida en 24 horas</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-box">
+                            <h5><i class="fas fa-info-circle text-primary me-2"></i>Información Importante</h5>
+                            <p class="mb-2">En el cuerpo del correo puedes incluir:</p>
+                            <ul class="text-start">
+                                <li>Tu nombre completo (opcional)</li>
+                                <li>Tu número de teléfono (opcional)</li>
+                                <li>Tus preferencias de contenido</li>
+                                <li>Tu barbería favorita (si aplica)</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box">
+                            <h5><i class="fas fa-shield-alt text-primary me-2"></i>Política de Privacidad</h5>
+                            <p class="mb-0">
+                                Respetamos tu privacidad. Tu información será usada exclusivamente para enviarte 
+                                nuestro boletín y promociones. No compartiremos tus datos con terceros. 
+                                Puedes cancelar tu suscripción en cualquier momento respondiendo a nuestro correo.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección de Frecuencia -->
+            <section class="benefits-section">
+                <div class="container">
+                    <h2 class="section-title">¿Con Qué Frecuencia Enviamos?</h2>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="benefit-card">
+                                <div class="benefit-icon">
+                                    <i class="fas fa-bullhorn"></i>
+                                </div>
+                                <h4>Promociones Semanales</h4>
+                                <p>Ofertas especiales cada semana para suscriptores</p>
+                                <div class="contact-detail">Todos los viernes por la mañana</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="benefit-card">
+                                <div class="benefit-icon">
+                                    <i class="fas fa-newspaper"></i>
+                                </div>
+                                <h4>Boletín Mensual</h4>
+                                <p>Resumen mensual con novedades y consejos de estilo</p>
+                                <div class="contact-detail">Primera semana de cada mes</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <section class="newsletter-section bg-dark py-5">
+            <div class="container text-center">
+                <h2 class="section-title">¿Tienes Preguntas?</h2>
+                <p class="lead mb-4">Contáctanos si necesitas ayuda con tu suscripción</p>
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="benefit-card">
+                            <div class="benefit-icon">
+                                <i class="fas fa-headset"></i>
+                            </div>
+                            <h5>Soporte al Suscriptor</h5>
+                            <div class="contact-detail">boletin@legadobarberia.cr</div>
+                            <div class="contact-detail">+506 2222-5555</div>
+                            <p class="mt-3">Estamos para ayudarte con cualquier duda sobre tu suscripción</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="bg-dark text-white text-center py-3">
+            <div class="container">
+                © 2025 Legado Barbería Costa Rica — Mantente siempre a la moda
+            </div>
+        </footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>

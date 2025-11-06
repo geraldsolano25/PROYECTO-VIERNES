@@ -1,69 +1,401 @@
-<!doctype html>
-<html lang="es">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Legado Barbería - Contacto</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body class="bg-dark text-light">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Legado Barbería - Contacto</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+        <style>
+            :root {
+                --primary-color: #c9a96e;
+                --dark-color: #1a1a1a;
+                --light-color: #f8f9fa;
+            }
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container">
-    <a class="navbar-brand" href="index.html">Legado Barbería</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navmenu">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
-        <li class="nav-item"><a class="nav-link" href="servicios.html">Servicios</a></li>
-        <li class="nav-item"><a class="nav-link" href="productos.html">Productos</a></li>
-        <li class="nav-item"><a class="nav-link" href="contacto.html">Contacto</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
+            body {
+                background-color: var(--dark-color);
+                color: var(--light-color);
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
 
-<main class="container my-5">
-  <h2 class="mb-4">Contacto</h2>
-  <div class="row">
-    <div class="col-md-6">
-      <form id="contactForm" onsubmit="return submitContact(event)">
-        <div class="mb-3">
-          <label class="form-label">Nombre</label>
-          <input type="text" class="form-control" id="name" required>
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Correo</label>
-          <input type="email" class="form-control" id="email" required>
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Mensaje</label>
-          <textarea class="form-control" id="message" rows="4" required></textarea>
-        </div>
-        <button class="btn btn-primary">Enviar</button>
-      </form>
-    </div>
-    <div class="col-md-6">
-      <h5>Visítanos</h5>
-      <p>Calle Principal 123, San José, Costa Rica</p>
-      <h5>Teléfono</h5>
-      <p>+506 7000 0000</p>
-      <h5>Horario</h5>
-      <p>Lun-Vie 9:00 - 18:00</p>
-    </div>
-  </div>
-</main>
+            .navbar-brand {
+                font-weight: bold;
+                color: var(--primary-color) !important;
+            }
 
-<footer class="bg-dark text-white text-center py-3 mt-5">
-  <div class="container">
-    © 2025 Legado Barbería — Inspirado en vorkbarbier.com
-  </div>
-</footer>
+            .nav-link {
+                color: var(--light-color) !important;
+                transition: color 0.3s;
+            }
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="js/main.js"></script>
-</body>
-</html>
+            .nav-link:hover {
+                color: var(--primary-color) !important;
+            }
+
+            .hero-contact {
+                background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1585747860715-2ba37e788b70?ixlib=rb-4.0.3&auto=format&fit=crop&w=1474&q=80');
+                background-size: cover;
+                background-position: center;
+                padding: 100px 0;
+                text-align: center;
+            }
+
+            .section-title {
+                color: var(--primary-color);
+                text-align: center;
+                margin-bottom: 40px;
+                position: relative;
+            }
+
+            .section-title:after {
+                content: '';
+                display: block;
+                width: 80px;
+                height: 3px;
+                background-color: var(--primary-color);
+                margin: 15px auto 0;
+            }
+
+            /* Estilos para la sección de contacto */
+            .contact-section {
+                padding: 80px 0;
+                background-color: #1a1a1a;
+            }
+
+            .contact-card {
+                background-color: #2a2a2a;
+                border-radius: 10px;
+                padding: 40px;
+                border: 1px solid #444;
+                transition: transform 0.3s, box-shadow 0.3s;
+                height: 100%;
+            }
+
+            .contact-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            }
+
+            .contact-icon {
+                font-size: 3rem;
+                color: var(--primary-color);
+                margin-bottom: 25px;
+                text-align: center;
+            }
+
+            .contact-title {
+                color: var(--primary-color);
+                font-weight: bold;
+                margin-bottom: 25px;
+                text-align: center;
+                font-size: 1.5rem;
+            }
+
+            .contact-info {
+                margin-bottom: 30px;
+            }
+
+            .contact-info p {
+                margin-bottom: 20px;
+                display: flex;
+                align-items: flex-start;
+            }
+
+            .contact-info i {
+                color: var(--primary-color);
+                margin-right: 15px;
+                width: 20px;
+                text-align: center;
+                margin-top: 3px;
+            }
+
+            .map-container {
+                border-radius: 10px;
+                overflow: hidden;
+                height: 300px;
+                margin-top: 30px;
+            }
+
+            .map-container iframe {
+                width: 100%;
+                height: 100%;
+                border: none;
+            }
+
+            .info-section {
+                padding: 60px 0;
+            }
+
+            .info-card {
+                background-color: #2a2a2a;
+                border-radius: 10px;
+                padding: 30px;
+                text-align: center;
+                height: 100%;
+                border: 1px solid #444;
+                transition: transform 0.3s;
+            }
+
+            .info-card:hover {
+                transform: translateY(-5px);
+            }
+
+            .info-icon {
+                font-size: 2.5rem;
+                color: var(--primary-color);
+                margin-bottom: 20px;
+            }
+
+            .contact-methods {
+                text-align: center;
+                margin-top: 30px;
+            }
+
+            .method-item {
+                margin-bottom: 15px;
+                padding: 15px;
+                background-color: #2a2a2a;
+                border-radius: 8px;
+                border-left: 4px solid var(--primary-color);
+            }
+
+            .contact-detail {
+                font-size: 1.1rem;
+                margin-bottom: 8px;
+            }
+
+            .contact-label {
+                color: var(--primary-color);
+                font-weight: bold;
+                display: block;
+                margin-bottom: 5px;
+            }
+        </style>
+    </head>
+    <body class="bg-dark text-light">
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">Legado Barbería</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navmenu">
+                    <ul class="navbar-nav ms-auto">
+                         <li class="nav-item"><a class="nav-link" th:href="@{/}">Inicio</a></li>
+                        <li class="nav-item px-2"><a class="nav-link" th:href="@{/servicios}">Servicios barbería</a></li>
+                        <li class="nav-item px-2"><a class="nav-link" th:href="@{/UbicacionHorarios}">Ubicación y Horarios</a></li>
+
+                        <li class="nav-item"><a class="nav-link" th:href="@{/productos}">Productos</a></li>
+
+                        <li class="nav-item"><a class="nav-link" th:href="@{/contacto}">Contacto</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/boletin}">Boletín</a></li>
+                        <li class="nav-item"><a class="nav-link" th:href="@{/redes}">Redes Sociales</a></li>
+           </ul>
+                </div>
+            </div>
+        </nav>
+
+        <section class="hero-contact">
+            <div class="container">
+                <h1 class="display-4">Contáctanos</h1>
+                <p class="lead">Estamos aquí para atenderte</p>
+            </div>
+        </section>
+
+        <main class="container my-5">
+            <!-- Sección de Información de Contacto -->
+            <section class="info-section">
+                <div class="container">
+                    <h2 class="section-title">Formas de Contacto</h2>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="info-card">
+                                <div class="info-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <h4>Visítanos</h4>
+                                <div class="contact-detail">Avenida Central, Calle 5</div>
+                                <div class="contact-detail">Barrio Amón, San José</div>
+                                <div class="contact-detail">Costa Rica</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="info-card">
+                                <div class="info-icon">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                <h4>Llámanos</h4>
+                                <div class="contact-detail">+506 2222-5555</div>
+                                <div class="contact-detail">+506 8888-9999</div>
+                                <div class="contact-detail">Lun-Dom: 9AM - 7PM</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección: Información de Contacto Detallada -->
+            <section class="contact-section">
+                <div class="container">
+                    <h2 class="section-title">Información de Contacto</h2>
+                    <div class="row g-5">
+                        <div class="col-lg-6">
+                            <div class="contact-card">
+                                <div class="contact-icon">
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                                <h3 class="contact-title">Detalles de Contacto</h3>
+
+                                <div class="contact-info">
+                                    <p>
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span>
+                                            <span class="contact-label">Dirección</span>
+                                            Avenida Central, Calle 5<br>
+                                                Barrio Amón, San José<br>
+                                                    Costa Rica
+                                                    </span>
+                                                    </p>
+
+                                                    <p>
+                                                        <i class="fas fa-phone"></i>
+                                                        <span>
+                                                            <span class="contact-label">Teléfonos</span>
+                                                            +506 2222-5555 (Oficina)<br>
+                                                                +506 8888-9999 (Móvil)
+                                                        </span>
+                                                    </p>
+
+                                                    <p>
+                                                        <i class="fas fa-envelope"></i>
+                                                        <span>
+                                                            <span class="contact-label">Email</span>
+                                                            info@legadobarberia.cr<br>
+                                                                citas@legadobarberia.cr
+                                                        </span>
+                                                    </p>
+
+                                                    <p>
+                                                        <i class="fas fa-clock"></i>
+                                                        <span>
+                                                            <span class="contact-label">Horario de Atención</span>
+                                                            Lunes a Viernes: 9:00 AM - 7:00 PM<br>
+                                                                Sábados: 8:00 AM - 6:00 PM<br>
+                                                                    Domingos: 10:00 AM - 4:00 PM
+                                                                    </span>
+                                                                    </p>
+                                                                    </div>
+
+                                                                    <div class="contact-methods">
+                                                                        <h5 class="text-primary mb-4">Métodos de Contacto</h5>
+                                                                        <div class="method-item">
+                                                                            <h6><i class="fas fa-phone text-primary me-2"></i>Llamada Telefónica</h6>
+                                                                            <p class="mb-0">Atención personalizada por teléfono</p>
+                                                                            <div class="contact-detail mt-2">+506 2222-5555</div>
+                                                                        </div>
+                                                                        <div class="method-item">
+                                                                            <h6><i class="fas fa-envelope text-warning me-2"></i>Correo Electrónico</h6>
+                                                                            <p class="mb-0">Para consultas detalladas y documentación</p>
+                                                                            <div class="contact-detail mt-2">citas@legadobarberia.cr</div>
+                                                                        </div>
+                                                                        <div class="method-item">
+                                                                            <h6><i class="fas fa-map-marker-alt text-danger me-2"></i>Visita Presencial</h6>
+                                                                            <p class="mb-0">Ven a conocernos personalmente</p>
+                                                                            <div class="contact-detail mt-2">Avenida Central, Calle 5</div>
+                                                                        </div>
+                                                                    </div>
+                                                                    </div>
+                                                                    </div>
+
+                                                                    <div class="col-lg-6">
+                                                                        <div class="contact-card">
+                                                                            <div class="contact-icon">
+                                                                                <i class="fas fa-map-marked-alt"></i>
+                                                                            </div>
+                                                                            <h3 class="contact-title">Nuestra Ubicación</h3>
+
+                                                                            <div class="contact-info">
+                                                                                <p>
+                                                                                    <i class="fas fa-subway"></i>
+                                                                                    <span>
+                                                                                        <span class="contact-label">Cómo Llegar</span>
+                                                                                        Frente al Parque Morazán<br>
+                                                                                            A 100m del Museo del Jade<br>
+                                                                                                Zona de parqueo gratuito disponible
+                                                                                                </span>
+                                                                                                </p>
+
+                                                                                                <p>
+                                                                                                    <i class="fas fa-bus"></i>
+                                                                                                    <span>
+                                                                                                        <span class="contact-label">Transporte Público</span>
+                                                                                                        Rutas de bus: San Pedro, Escazú, Heredia<br>
+                                                                                                            Parada: Barrio Amón (100m)<br>
+                                                                                                                Estación de tren: 500m
+                                                                                                                </span>
+                                                                                                                </p>
+
+                                                                                                                <p>
+                                                                                                                    <i class="fas fa-car"></i>
+                                                                                                                    <span>
+                                                                                                                        <span class="contact-label">Parqueo</span>
+                                                                                                                        Parqueo gratuito para clientes<br>
+                                                                                                                            Capacidad: 15 vehículos<br>
+                                                                                                                                Vigilancia 24/7
+                                                                                                                                </span>
+                                                                                                                                </p>
+                                                                                                                                </div>
+
+                                                                                                                                <div class="map-container">
+                                                                                                                                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3929.982719999593!2d-84.07743292424067!3d9.935290290160022!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8fa0e3aa66f337c5%3A0x1cd3685198fcb252!2sSan%20Jos%C3%A9%2C%20Costa%20Rica!5e0!3m2!1ses!2scr!4v1699123456789!5m2!1ses!2scr" allowfullscreen="" loading="lazy"></iframe>
+                                                                                                                                </div>
+                                                                                                                                </div>
+                                                                                                                                </div>
+                                                                                                                                </div>
+                                                                                                                                </div>
+                                                                                                                                </section>
+                                                                                                                                </main>
+
+                                                                                                                                <section class="contact-section bg-dark py-5">
+                                                                                                                                    <div class="container text-center">
+                                                                                                                                        <h2 class="section-title">¿Listo para tu Próximo Corte?</h2>
+                                                                                                                                        <p class="lead mb-4">Contáctanos ahora y agenda tu cita</p>
+                                                                                                                                        <div class="row justify-content-center">
+                                                                                                                                            <div class="col-md-4 mb-3">
+                                                                                                                                                <div class="method-item">
+                                                                                                                                                    <h5><i class="fas fa-phone text-primary me-2"></i>Por Teléfono</h5>
+                                                                                                                                                    <div class="contact-detail">+506 2222-5555</div>
+                                                                                                                                                    <div class="contact-detail">+506 8888-9999</div>
+                                                                                                                                                </div>
+                                                                                                                                            </div>
+                                                                                                                                            <div class="col-md-4 mb-3">
+                                                                                                                                                <div class="method-item">
+                                                                                                                                                    <h5><i class="fas fa-envelope text-warning me-2"></i>Por Email</h5>
+                                                                                                                                                    <div class="contact-detail">citas@legadobarberia.cr</div>
+                                                                                                                                                    <div class="contact-detail">info@legadobarberia.cr</div>
+                                                                                                                                                </div>
+                                                                                                                                            </div>
+                                                                                                                                            <div class="col-md-4 mb-3">
+                                                                                                                                                <div class="method-item">
+                                                                                                                                                    <h5><i class="fas fa-map-marker-alt text-danger me-2"></i>En Persona</h5>
+                                                                                                                                                    <div class="contact-detail">Avenida Central, Calle 5</div>
+                                                                                                                                                    <div class="contact-detail">Barrio Amón, San José</div>
+                                                                                                                                                </div>
+                                                                                                                                            </div>
+                                                                                                                                        </div>
+                                                                                                                                    </div>
+                                                                                                                                </section>
+
+                                                                                                                                <footer class="bg-dark text-white text-center py-3">
+                                                                                                                                    <div class="container">
+                                                                                                                                        © 2025 Legado Barbería Costa Rica — Siempre a tu servicio
+                                                                                                                                    </div>
+                                                                                                                                </footer>
+
+                                                                                                                                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+                                                                                                                                </body>
+                                                                                                                                </html>

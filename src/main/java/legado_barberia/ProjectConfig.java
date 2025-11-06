@@ -40,6 +40,8 @@ public class ProjectConfig implements WebMvcConfigurer {
         registry.addViewController("/productos").setViewName("productos");
         registry.addViewController("/contacto").setViewName("contacto");
         registry.addViewController("/UbicacionHorarios").setViewName("UbicacionHorarios");
+        registry.addViewController("/boletin").setViewName("boletin");
+        registry.addViewController("/redes").setViewName("redes");
     }
 
     /* El siguiente método se utilizar para publicar en la nube, independientemente  */

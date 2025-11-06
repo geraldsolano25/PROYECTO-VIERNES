@@ -39,8 +39,17 @@ public class HomeController {
     }
 
     @GetMapping("/contacto")
-    public String contacto(Model model) {
-        model.addAttribute("titulo", "Contacto");
+    public String contacto() {
         return "contacto";
+    }
+    
+    @GetMapping("/boletin")
+    public String boletin() {
+        return "boletin";
+    }
+    
+    @GetMapping("/redes")
+    public String redes() {
+        return "redes";
     }
 }
