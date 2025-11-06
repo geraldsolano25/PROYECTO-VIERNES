@@ -1,4 +1,4 @@
-package com.tienda_vm.domain;
+package com.legado_barberia.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

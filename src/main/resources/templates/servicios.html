@@ -1,80 +1,328 @@
-<!doctype html>
-<html lang="es">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Legado Barbería - Servicios</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
-</head>
-<body class="bg-dark text-light">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Legado Barbería - Servicios</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+       <style>
+            :root {
+                --primary-color: #c9a96e;
+                --dark-color: #1a1a1a;
+                --light-color: #f8f9fa;
+            }
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container">
-    <a class="navbar-brand" href="index.html">Legado Barbería</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navmenu">
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
-        <li class="nav-item"><a class="nav-link" href="servicios.html">Servicios</a></li>
-        <li class="nav-item"><a class="nav-link" href="productos.html">Productos</a></li>
-        <li class="nav-item"><a class="nav-link" href="contacto.html">Contacto</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
+            body {
+                background-color: var(--dark-color);
+                color: var(--light-color);
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
 
-<main class="container my-5">
-  <h2 class="mb-4">Servicios profesionales</h2>
-  <div class="row gy-4">
-    <div class="col-md-6">
-      <div class="card bg-secondary text-light h-100">
-        <div class="card-body">
-          <h5 class="card-title">Corte clásico</h5>
-          <p class="card-text">Corte tradicional con máquina y tijera, acabado a la perfección.</p>
-          <p class="fw-bold">₡8,000</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="card bg-secondary text-light h-100">
-        <div class="card-body">
-          <h5 class="card-title">Afeitado a navaja</h5>
-          <p class="card-text">Afeitado tradicional con toalla caliente y navaja profesional.</p>
-          <p class="fw-bold">₡10,000</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="card bg-secondary text-light h-100">
-        <div class="card-body">
-          <h5 class="card-title">Arreglo de barba</h5>
-          <p class="card-text">Perfilado y tratamiento de barba con productos premium.</p>
-          <p class="fw-bold">₡6,500</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="card bg-secondary text-light h-100">
-        <div class="card-body">
-          <h5 class="card-title">Tratamiento capilar</h5>
-          <p class="card-text">Tratamientos nutritivos y masaje capilar.</p>
-          <p class="fw-bold">₡12,000</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</main>
+            .navbar-brand {
+                font-weight: bold;
+                color: var(--primary-color) !important;
+            }
 
-<footer class="bg-dark text-white text-center py-3 mt-5">
-  <div class="container">
-    © 2025 Legado Barbería — Inspirado en vorkbarbier.com
-  </div>
-</footer>
+            .nav-link {
+                color: var(--light-color) !important;
+                transition: color 0.3s;
+            }
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="js/main.js"></script>
-</body>
+            .nav-link:hover {
+                color: var(--primary-color) !important;
+            }
+
+            .hero-services {
+                background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1585747860715-2ba37e788b70?ixlib=rb-4.0.3&auto=format&fit=crop&w=1474&q=80');
+                background-size: cover;
+                background-position: center;
+                padding: 100px 0;
+                text-align: center;
+            }
+
+            .service-card {
+                background-color: #2a2a2a;
+                border-radius: 10px;
+                overflow: hidden;
+                transition: transform 0.3s, box-shadow 0.3s;
+                height: 100%;
+                border: 1px solid #444;
+            }
+
+            .service-card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            }
+
+            .service-img {
+                height: 200px;
+                object-fit: cover;
+                width: 100%;
+            }
+
+            .service-icon {
+                font-size: 2.5rem;
+                color: var(--primary-color);
+                margin-bottom: 15px;
+            }
+
+            .service-title {
+                color: var(--primary-color);
+                font-weight: bold;
+                margin-bottom: 15px;
+            }
+
+            .price-tag {
+                background-color: var(--primary-color);
+                color: var(--dark-color);
+                padding: 5px 15px;
+                border-radius: 20px;
+                font-weight: bold;
+                display: inline-block;
+                margin-top: 10px;
+            }
+
+            .btn-primary {
+                background-color: var(--primary-color);
+                border-color: var(--primary-color);
+                color: var(--dark-color);
+                font-weight: bold;
+                padding: 10px 25px;
+                transition: all 0.3s;
+            }
+
+            .btn-primary:hover {
+                background-color: #b89a5e;
+                border-color: #b89a5e;
+                transform: scale(1.05);
+            }
+
+            .process-step {
+                text-align: center;
+                padding: 20px;
+            }
+
+            .step-number {
+                background-color: var(--primary-color);
+                color: var(--dark-color);
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+                margin: 0 auto 15px;
+            }
+
+            .section-title {
+                color: var(--primary-color);
+                text-align: center;
+                margin-bottom: 40px;
+                position: relative;
+            }
+
+            .section-title:after {
+                content: '';
+                display: block;
+                width: 80px;
+                height: 3px;
+                background-color: var(--primary-color);
+                margin: 15px auto 0;
+            }
+
+            .testimonial-card {
+                background-color: #2a2a2a;
+                border-radius: 10px;
+                padding: 25px;
+                margin-bottom: 20px;
+                border-left: 4px solid var(--primary-color);
+            }
+
+            .testimonial-text {
+                font-style: italic;
+                margin-bottom: 15px;
+            }
+
+            .testimonial-author {
+                color: var(--primary-color);
+                font-weight: bold;
+            }
+
+            .booking-section {
+                background: linear-gradient(rgba(26, 26, 26, 0.9), rgba(26, 26, 26, 0.9)), url('https://images.unsplash.com/photo-1562157873-818bc0726f68?ixlib=rb-4.0.3&auto=format&fit=crop&w=1474&q=80');
+                background-size: cover;
+                background-position: center;
+                padding: 80px 0;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body class="bg-dark text-light">
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">Legado Barbería</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navmenu">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="servicios.html">Servicios</a></li>
+                        <li class="nav-item"><a class="nav-link" href="productos.html">Productos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="contacto.html">Contacto</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <section class="hero-services">
+            <div class="container">
+                <h1 class="display-4">Nuestros Servicios</h1>
+                <p class="lead">Experiencia, precisión y tradición en cada corte</p>
+            </div>
+        </section>
+
+        <main class="container my-5">
+            <h2 class="section-title">Servicios Principales</h2>
+
+            <div class="row g-4 mb-5">
+                <div class="col-md-4">
+                    <div class="service-card">
+                        <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1476&q=80" alt="Corte de cabello clásico" class="service-img">
+                        <div class="p-4">
+                            <div class="service-icon"><i class="fas fa-cut"></i></div>
+                            <h3 class="service-title">Corte Clásico</h3>
+                            <p>Nuestro corte tradicional con técnicas probadas que garantizan un resultado impecable y duradero.</p>
+                            <div class="price-tag">$10</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="service-card">
+                        <div class="p-4">
+                            <div class="service-icon"><i class="fas fa-air-freshener"></i></div>
+                            <h3 class="service-title">Afeitado con Navaja</h3>
+                            <p>Experimenta el arte del afeitado tradicional con toallas calientes y productos de primera calidad.</p>
+                            <div class="price-tag">$15</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="service-card">
+                       <div class="p-4">
+                            <div class="service-icon"><i class="fas fa-user"></i></div>
+                            <h3 class="service-title">Arreglo de Barba</h3>
+                            <p>Dale forma y estilo a tu barba con nuestras técnicas de precisión y acabados perfectos.</p>
+                            <div class="price-tag">$15</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title">Servicios Especializados</h2>
+
+            <div class="row g-4 mb-5">
+                <div class="col-md-6">
+                    <div class="service-card">
+                        <div class="p-4">
+                            <div class="service-icon"><i class="fas fa-spa"></i></div>
+                            <h3 class="service-title">Tratamiento Capilar</h3>
+                            <p>Revitaliza tu cabello con nuestros tratamientos profesionales que nutren y fortalecen.</p>
+                            <div class="price-tag">$150</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="service-card">
+                       <div class="p-4">
+                            <div class="service-icon"><i class="fas fa-crown"></i></div>
+                            <h3 class="service-title">Servicio Premium</h3>
+                            <p>La experiencia completa: corte, afeitado, tratamiento capilar y masaje relajante.</p>
+                            <div class="price-tag">$200</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title">Nuestro Proceso</h2>
+
+            <div class="row g-4 mb-5">
+                <div class="col-md-3">
+                    <div class="process-step">
+                        <div class="step-number">1</div>
+                        <h4>Consulta</h4>
+                        <p>Analizamos tu estilo y necesidades para ofrecerte el mejor servicio.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="process-step">
+                        <div class="step-number">2</div>
+                        <h4>Preparación</h4>
+                        <p>Preparamos tu cabello y piel con productos de calidad para un mejor resultado.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="process-step">
+                        <div class="step-number">3</div>
+                        <h4>Ejecución</h4>
+                        <p>Nuestros barberos aplican técnicas precisas para lograr el look deseado.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="process-step">
+                        <div class="step-number">4</div>
+                        <h4>Acabado</h4>
+                        <p>Productos de acabado y recomendaciones para mantener tu estilo.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title">Testimonios</h2>
+
+            <div class="row g-4 mb-5">
+                <div class="col-md-4">
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">"La mejor barbería de la ciudad. Siempre salgo con un corte impecable y el servicio es excepcional."</p>
+                        <p class="testimonial-author">- Carlos Mendoza</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">"El afeitado con navaja es una experiencia que todo hombre debería probar al menos una vez."</p>
+                        <p class="testimonial-author">- Javier López</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">"Los productos que usan son de primera calidad y el ambiente en la barbería es único."</p>
+                        <p class="testimonial-author">- Roberto Silva</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <section class="booking-section">
+            <div class="container">
+                <h2 class="section-title">Reserva tu Cita</h2>
+                <p class="lead mb-4">Asegura tu lugar y vive la experiencia Legado Barbería</p>
+                <a href="contacto.html" class="btn btn-primary btn-lg">Reservar Ahora</a>
+            </div>
+        </section>
+
+        <footer class="bg-dark text-white text-center py-3">
+            <div class="container">
+                © 2025 Legado Barbería — Inspirado en vorkbarbier.com
+            </div>
+        </footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
 </html>

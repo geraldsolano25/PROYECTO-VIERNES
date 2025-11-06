@@ -13,8 +13,10 @@
   <h1>Legado Barbería</h1>
   <nav>
     <a href="/" class="text-white mx-3">Inicio</a>
-    <a href="/servicios" class="text-white mx-3">Servicios</a>
-    <a href="/productos" class="text-white mx-3">Productos</a>
+   <li class="nav-item px-2"><a class="nav-link" th:href="@{/servicios}">Servicios barbería</a></li>
+    <li class="nav-item px-2"><a class="nav-link" th:href="@{/UbicacionHorarios}">Ubicación y Horarios</a></li>
+ 
+   <a href="/productos" class="text-white mx-3">Productos</a>
     <a href="/contacto" class="text-white mx-3">Contacto</a>
   </nav>
 </header>

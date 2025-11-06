@@ -1,4 +1,4 @@
-package com.tienda_vm;
+package legado_barberia;
 
 import java.util.Locale;
 import org.springframework.context.MessageSource;
@@ -34,6 +34,12 @@ public class ProjectConfig implements WebMvcConfigurer {
         registry.addViewController("/iframes").setViewName("iframes");
         registry.addViewController("/login").setViewName("login");
         registry.addViewController("/registro/nuevo").setViewName("/registro/nuevo");
+   
+        // ✅ AGREGA ESTAS LÍNEAS:
+        registry.addViewController("/servicios").setViewName("servicios");
+        registry.addViewController("/productos").setViewName("productos");
+        registry.addViewController("/contacto").setViewName("contacto");
+        registry.addViewController("/UbicacionHorarios").setViewName("UbicacionHorarios");
     }
 
     /* El siguiente método se utilizar para publicar en la nube, independientemente  */

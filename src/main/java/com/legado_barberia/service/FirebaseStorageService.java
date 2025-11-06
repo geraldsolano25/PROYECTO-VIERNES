@@ -1,4 +1,4 @@
-package com.tienda_vm.service;
+package com.legado_barberia.service;
 
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;

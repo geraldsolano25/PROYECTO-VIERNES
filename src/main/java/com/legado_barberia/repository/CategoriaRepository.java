@@ -1,6 +1,6 @@
-package com.tienda_vm.repository;
+package com.legado_barberia.repository;
 
-import com.tienda_vm.domain.Categoria;
+import com.legado_barberia.domain.Categoria;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

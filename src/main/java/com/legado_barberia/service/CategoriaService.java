@@ -1,7 +1,7 @@
-package com.tienda_vm.service;
+package com.legado_barberia.service;
 
-import com.tienda_vm.domain.Categoria;
-import com.tienda_vm.repository.CategoriaRepository;
+import com.legado_barberia.domain.Categoria;
+import com.legado_barberia.repository.CategoriaRepository;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;

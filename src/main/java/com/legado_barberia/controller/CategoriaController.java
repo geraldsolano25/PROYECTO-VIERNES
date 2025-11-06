@@ -1,7 +1,7 @@
-package com.tienda_vm.controller;
+package com.legado_barberia.controller;
 
-import com.tienda_vm.domain.Categoria;
-import com.tienda_vm.service.CategoriaService;
+import com.legado_barberia.domain.Categoria;
+import com.legado_barberia.service.CategoriaService;
 import jakarta.validation.Valid;
 import java.util.Locale;
 import java.util.Optional;
