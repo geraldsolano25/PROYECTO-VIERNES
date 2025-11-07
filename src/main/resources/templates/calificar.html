@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Legado Barbería - Calificar Servicio</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .star {
+      font-size: 2rem;
+      color: gray;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    .star.selected {
+      color: gold;
+    }
+  </style>
+</head>
+<body class="bg-dark text-light">
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">Legado Barbería</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navmenu">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+        <li class="nav-item"><a class="nav-link" href="servicios.html">Servicios</a></li>
+        <li class="nav-item"><a class="nav-link" href="productos.html">Productos</a></li>
+        <li class="nav-item"><a class="nav-link" href="promociones.html">Promociones</a></li>
+        <li class="nav-item"><a class="nav-link active" href="calificar.html">Calificar Servicio</a></li>
+        <li class="nav-item"><a class="nav-link" href="contacto.html">Contacto</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+<main class="container my-5">
+  <h2 class="text-center mb-4">Calificar Servicio</h2>
+
+ 
+  <div class="alert alert-success text-center" role="alert">
+    ✅ Tienes una cita completada. Puedes calificar tu servicio.
+  </div>
+
+  <form class="mx-auto" style="max-width: 500px;">
+    <div class="mb-3">
+      <label for="nombre" class="form-label">Tu nombre</label>
+      <input type="text" id="nombre" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Selecciona el servicio que recibiste</label>
+      <select class="form-select" required>
+        <option value="">-- Selecciona --</option>
+        <option>Corte clásico</option>
+        <option>Corte + Barba Premium</option>
+        <option>Barba Tradicional</option>
+        <option>Tinte / Alineado</option>
+      </select>
+    </div>
+
+    <div class="mb-3 text-center">
+      <label class="form-label">Calificación</label><br>
+      <span class="star" onclick="selectStars(1)">★</span>
+      <span class="star" onclick="selectStars(2)">★</span>
+      <span class="star" onclick="selectStars(3)">★</span>
+      <span class="star" onclick="selectStars(4)">★</span>
+      <span class="star" onclick="selectStars(5)">★</span>
+    </div>
+
+    <div class="mb-3">
+      <label for="comentario" class="form-label">Comentario</label>
+      <textarea id="comentario" class="form-control" rows="4" placeholder="Cuéntanos tu experiencia..." required></textarea>
+    </div>
+
+    <div class="text-center">
+      <button type="submit" class="btn btn-primary px-4">Enviar Calificación</button>
+    </div>
+  </form>
+</main>
+
+
+<footer class="bg-dark text-white text-center py-3 mt-5">
+  <div class="container">
+    © 2025 Legado Barbería — Inspirado en vorkbarbier.com
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Simulación de estrellas seleccionadas
+  function selectStars(num) {
+    const stars = document.querySelectorAll('.star');
+    stars.forEach((s, i) => {
+      s.classList.toggle('selected', i < num);
+    });
+  }
+</script>
+</body>
+</html>
