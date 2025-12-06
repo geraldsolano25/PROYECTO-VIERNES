@@ -12,9 +12,11 @@
     <body>
         
         <header th:replace="~{general/fragmentos :: header}"/>
-         <section th:replace="~{consultas/fragmentos :: tabs}"></section>
-        
-        <section th:replace="~{consultas/fragmentos :: tarjetas}"></section>
+      
+        <section th:replace="~{cliente/fragmentos :: editar}"/>
+      
+        <section th:replace="~{general/fragmentos :: mostrarToast}"/>
+
         
         <footer th:replace="~{general/fragmentos :: footer}"/>
     </body>

@@ -1,4 +1,4 @@
-#Etapa 1: Compilación
+#Erapa 1: Compilación
 FROM maven:3.8.5-openjdk-17 as build
 workdir /app
 COPY . .
