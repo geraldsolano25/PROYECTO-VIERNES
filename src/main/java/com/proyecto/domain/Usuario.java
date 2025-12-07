@@ -25,12 +25,5 @@ public class Usuario implements Serializable {
     private String rutaImagen;    
     private boolean activo;
 
-    // Relación Many-to-Many con la entidad Rol
-@ManyToMany(fetch = FetchType.LAZY) 
-@JoinTable(
-    name = "usuario_rol",
-    joinColumns = @JoinColumn(name = "id_usuario"),
-    inverseJoinColumns = @JoinColumn(name = "id_rol")
-)
-    private Set<Rol> roles = new HashSet<>();
+
 }

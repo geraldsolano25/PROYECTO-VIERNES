@@ -3,188 +3,443 @@
       xmlns:th="http://www.thymeleaf.org"      
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
     <head th:fragment="head">
-        <title>TechShop</title>
+        <title>Legado Barbería - Estilo Clásico</title>
         <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
         <link th:href="@{/webjars/font-awesome/css/all.css}" rel="stylesheet"/>
-         <script th:src="@{/js/rutinas.js}"></script>
+        <script th:src="@{/js/rutinas.js}"></script>
         <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
         <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
         <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>  
         <link th:href="@{/css/estilos.css}" rel="stylesheet"/>
         <meta name="_csrf" th:content="${_csrf.token}"/>
         <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+        <style>
+            /* Estilos inspirados en vorkbarbier.com */
+            .navbar-brand img {
+                height: 40px;
+            }
+            
+            .hero-section {
+                background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                            url('https://images.unsplash.com/photo-1585747860715-2ba37e788b70?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+                background-size: cover;
+                background-position: center;
+                background-attachment: fixed;
+                min-height: 80vh;
+            }
+            
+            .service-card {
+                background: white;
+                border: none;
+                border-radius: 8px;
+                transition: transform 0.3s ease;
+                overflow: hidden;
+            }
+            
+            .service-card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            }
+            
+            .barber-icon {
+                font-size: 3rem;
+                color: #d4af37;
+            }
+            
+            .section-title {
+                position: relative;
+                padding-bottom: 15px;
+                margin-bottom: 40px;
+            }
+            
+            .section-title:after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 80px;
+                height: 3px;
+                background: #d4af37;
+            }
+            
+            .btn-gold {
+                background-color: #d4af37;
+                border-color: #d4af37;
+                color: #000;
+                font-weight: 600;
+                padding: 12px 30px;
+                border-radius: 30px;
+                transition: all 0.3s ease;
+            }
+            
+            .btn-gold:hover {
+                background-color: #b8941f;
+                border-color: #b8941f;
+                color: #000;
+                transform: translateY(-2px);
+            }
+            
+            .testimonial-card {
+                background: #f8f9fa;
+                border-left: 4px solid #d4af37;
+                padding: 25px;
+                border-radius: 0 8px 8px 0;
+            }
+            
+            .opening-hours {
+                background: #1a1a1a;
+                color: white;
+                padding: 30px;
+                border-radius: 8px;
+            }
+            
+            .opening-hours li {
+                border-bottom: 1px solid #333;
+                padding: 10px 0;
+            }
+            
+            .gallery-item {
+                position: relative;
+                overflow: hidden;
+                border-radius: 8px;
+                margin-bottom: 20px;
+            }
+            
+            .gallery-item img {
+                transition: transform 0.5s ease;
+            }
+            
+            .gallery-item:hover img {
+                transform: scale(1.1);
+            }
+            
+            .team-member {
+                text-align: center;
+                margin-bottom: 30px;
+            }
+            
+            .team-member img {
+                width: 150px;
+                height: 150px;
+                object-fit: cover;
+                border-radius: 50%;
+                margin-bottom: 15px;
+                border: 3px solid #d4af37;
+            }
+            
+            .social-links a {
+                display: inline-block;
+                width: 40px;
+                height: 40px;
+                background: #333;
+                color: white;
+                border-radius: 50%;
+                line-height: 40px;
+                margin: 0 5px;
+                transition: all 0.3s ease;
+            }
+            
+            .social-links a:hover {
+                background: #d4af37;
+                color: #000;
+                transform: translateY(-3px);
+            }
+            
+            /* Animaciones */
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            
+            .animate-fadeInUp {
+                animation: fadeInUp 0.6s ease-out;
+            }
+            
+            /* Responsive */
+            @media (max-width: 768px) {
+                .hero-section {
+                    min-height: 60vh;
+                    background-attachment: scroll;
+                }
+                
+                .display-4 {
+                    font-size: 2.5rem;
+                }
+            }
+        </style>
     </head>
     <body>
-        <header th:fragment="header" class="header d-print-none">
-            <nav class="navbar navbar-expand-sm p-0">
-                <div class="container">                    
-                    <a th:href="@{/}" class="navbar-brand">[[#{aplicacion.titulo}]]</a>
-                    <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-                        <ul class="navbar-nav">
-                            <li class="nav-item px-2"><a class="nav-link" th:href="@{/cliente/listado}">[[#{plantilla.cliente}]]</a></li>
-                            <li class="nav-item px-2"><a class="nav-link" th:href="@{/producto/listado}">[[#{plantilla.productos}]]</a></li>
-                            <li class="nav-item px-2"><a class="nav-link" th:href="@{/consultas/listado}">[[#{plantilla.consultas}]]</a></li>
-                              <li class="nav-item px-2"><a class="nav-link" th:href="@{/usuario/listado}">[[#{plantilla.admin}]]</a></li>
-                           
-                            <li class="nav-item dropdown" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_VENDEDOR')">
-                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
-                                    [[#{plantilla.admin}]]</a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" th:href="@{/usuario/listado}">[[#{plantilla.usuarios}]]</a></li>                                    
-                                    <li class="submenu submenu-md dropend">
-                                        <a class="dropdown-item dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false"
-                                           onclick="event.stopPropagation();">
-                                            [[#{plantilla.seguridad}]]
-                                        </a>
-                                        <ul class="dropdown-menu">                                            
-                                            <li><a class="dropdown-item" th:href="@{/role/listado}">[[#{plantilla.troles}]]</a></li>
-                                            <li><a class="dropdown-item" th:href="@{/usuario_rol/mantenimiento}">[[#{plantilla.permisos}]]</a></li>
-                                            <li><a class="dropdown-item" th:href="@{/ruta/listado}">[[#{plantilla.rutas}]]</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a class="dropdown-item" th:href="@{/constante/listado}">[[#{plantilla.constantes}]]</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                        <ul class="navbar-nav">
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
-                                    [[#{plantilla.idioma}]]</a>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" th:href="@{/(lang=es)}">Español</a></li>
-                                    <li><a class="dropdown-item" th:href="@{/(lang=en)}">English</a></li>
-                                    <li><a class="dropdown-item" th:href="@{/(lang=fr)}">Française</a></li>
-                                    <li><a class="dropdown-item" th:href="@{/(lang=pt)}">Portugaise</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                        <div id="resultBlock">
+        <!-- Header Fragment -->
+        <header th:fragment="header">
+            <!-- Navigation -->
+            <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm py-3">
+                <div class="container">
+                    <a th:href="@{/}" class="navbar-brand">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-cut fa-2x text-dark me-2"></i>
+                            <div>
+                                <h4 class="mb-0 fw-bold" style="color: #d4af37;">LEGADO</h4>
+                                <small class="text-muted">BARBERÍA CLÁSICA</small>
+                            </div>
                         </div>
-                        
-                        <ul class="navbar-nav" sec:authorize="!isAuthenticated()">
+                    </a>
+           
+                    
+                    <div class="collapse navbar-collapse" id="navbarMain">
+                        <ul class="navbar-nav mx-auto">
                             <li class="nav-item">
-                                <a class="nav-link" th:href="@{/login}">
-                                    <i class="fas fa-sign-in-alt"></i>
-                                    <span class="ms-1">Login</span>
+                                <a class="nav-link fw-semibold px-3" th:href="@{/}">INICIO</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link fw-semibold px-3" th:href="@{/cliente/listado}">CLIENTES</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link fw-semibold px-3" th:href="@{/cita/listado}">CITAS</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link fw-semibold px-3 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                    SERVICIOS
                                 </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#">Cortes Clásicos</a></li>
+                                    <li><a class="dropdown-item" href="#">Afeitado Tradicional</a></li>
+                                    <li><a class="dropdown-item" href="#">Tratamientos</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link fw-semibold px-3" href="#">GALERÍA</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link fw-semibold px-3" href="#">CONTACTO</a>
                             </li>
                         </ul>
-                         <ul class="navbar-nav" sec:authorize="!isAuthenticated()">
-                            <li class="nav-item my-auto">
-                                <a class="nav-link">
-                                   <img th:src="@{${session.imagenUsuario}}"
-                                        alt="..." height="40" class="rounded-circle"/>
-                                    <span sec:authentication="name" class="ms-1">user</span>
-                                </a>
-                            </li>
-                            <li class="nav-item my-auto">
-                                <form method="post" th:action="@{/logout}">
-                                    <button class="btn nav-link" type="submit">
-                                        <i class="fas fa-sign-in-alt"></i>
-                                        <span class="ms-1">Logout</span>
-                                    </button>
-                                    
-                                </form>
-                            </li>
-                        </ul>
                         
-                        
-                        
+                        <div class="d-flex align-items-center">
+                            <!-- Usuario no autenticado -->
+                            <ul class="navbar-nav" sec:authorize="!isAuthenticated()">
+                                <li class="nav-item">
+                                    <a class="btn btn-gold" th:href="@{/login}">
+                                        <i class="fas fa-sign-in-alt me-2"></i>ACCEDER
+                                    </a>
+                                </li>
+                            </ul>
+                            
+                            <!-- Usuario autenticado -->
+                            <ul class="navbar-nav" sec:authorize="isAuthenticated()">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                                        <img th:src="@{${session.imagenUsuario}}"
+                                             alt="Usuario" height="36" width="36" 
+                                             class="rounded-circle border border-warning object-fit-cover me-2"/>
+                                        <span sec:authentication="name" class="fw-bold">Usuario</span>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li>
+                                            <a class="dropdown-item" href="#">
+                                                <i class="fas fa-user me-2"></i>Mi Perfil
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="#">
+                                                <i class="fas fa-calendar me-2"></i>Mis Citas
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <form method="post" th:action="@{/logout}" class="mb-0">
+                                                <button class="dropdown-item" type="submit">
+                                                    <i class="fas fa-sign-out-alt me-2"></i>
+                                                    Salir
+                                                </button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </nav>
-            <section id="main-header" class="py-2 bg-success text-white">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h1><i class="fas fa-cog"></i> [[#{plantilla.suTienda}]]</h1>
+
+            <!-- Hero Section -->
+            <section class="hero-section d-flex align-items-center pt-5 mt-5">
+                <div class="container py-5 mt-5">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 animate-fadeInUp">
+                            <h1 class="display-4 fw-bold text-white mb-4">
+                                BARBERÍA DE <span style="color: #d4af37;">LEGADO</span>
+                            </h1>
+                            <p class="lead text-white mb-4">
+                                Desde 1950, mantenemos viva la tradición del barbero clásico 
+                                combinada con las últimas tendencias en cuidado masculino.
+                            </p>
+                            <div class="d-flex flex-wrap gap-3">
+                                <a href="#" class="btn btn-gold">
+                                    <i class="fas fa-calendar-check me-2"></i>RESERVAR CITA
+                                </a>
+                                <a href="#" class="btn btn-outline-light">
+                                    <i class="fas fa-play me-2"></i>VER VIDEO
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
         </header>
 
-        <footer th:fragment="footer" class="p-2 mt-5 bg-info text-white d-print-none">
-            <p class="lead text-center">[[#{plantilla.derechos}]] &COPY;</p>
-        </footer>
-        
-          <section th:fragment="mostrarToast">
-            <div aria-live="polite" aria-atomic="true" 
-                 class="position-fixed top-50 start-50 translate-middle" style="z-index: 1080;">                
-                <div th:if="${error}" class="toast show"
-                     role="alert"
-                     aria-live="assertive"                     
-                     aria-atomic="true"
-                     data-bs-autohide="true">
-                    <div class="toast-header text-white bg-danger">
-                        <i class="fa-solid fa-bomb"></i> <strong clas=me-auto> [[#{error}]]</strong>
-                    </div>
-                    <div class="toast-body">
-                        <p>[[${error}]]</p>
-                        <div class="mt-2 pt-2 border-top text-center">
-                            <button type="button" class="btn btn-secondary btn-sm" 
-                                    data-bs-dismiss="toast">[[#{accion.cerrar}]]</button>
+    
+
+        <!-- Footer Fragment -->
+        <footer th:fragment="footer" class="bg-dark text-white pt-5">
+            <div class="container">
+                <div class="row g-4">
+                    <div class="col-lg-4">
+                        <div class="d-flex align-items-center mb-4">
+                            <i class="fas fa-cut fa-2x me-3" style="color: #d4af37;"></i>
+                            <div>
+                                <h4 class="fw-bold mb-0" style="color: #d4af37;">LEGADO</h4>
+                                <small>BARBERÍA CLÁSICA</small>
+                            </div>
                         </div>
+                        <p class="text-light mb-4">
+                            Especialistas en cortes clásicos y afeitado tradicional desde 1950. 
+                            Donde cada detalle importa y cada cliente es tratado con excelencia.
+                        </p>
+                        <div class="social-links mb-4">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <h5 class="fw-bold mb-4" style="color: #d4af37;">HORARIOS</h5>
+                        <div class="opening-hours">
+                            <ul class="list-unstyled">
+                                <li class="d-flex justify-content-between">
+                                    <span>Lunes - Viernes</span>
+                                    <span>9:00 - 20:00</span>
+                                </li>
+                                <li class="d-flex justify-content-between">
+                                    <span>Sábado</span>
+                                    <span>9:00 - 18:00</span>
+                                </li>
+                                <li class="d-flex justify-content-between">
+                                    <span>Domingo</span>
+                                    <span>10:00 - 16:00</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <h5 class="fw-bold mb-4" style="color: #d4af37;">CONTACTO</h5>
+                        <ul class="list-unstyled text-light">
+                            <li class="mb-3">
+                                <i class="fas fa-map-marker-alt me-3" style="color: #d4af37;"></i>
+                                Calle Tradición 123, Ciudad
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-phone me-3" style="color: #d4af37;"></i>
+                                +1 234 567 890
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-envelope me-3" style="color: #d4af37;"></i>
+                                info@legadobarberia.com
+                            </li>
+                            <li>
+                                <i class="fas fa-clock me-3" style="color: #d4af37;"></i>
+                                Abierto 7 días a la semana
+                            </li>
+                        </ul>
                     </div>
                 </div>
-                <div th:if="${todoOk}" class="toast show"
-                     role="status"
-                     aria-live="polite"
-                     aria-atomic="true"
-                     data-bs-autohide="true">
-                    <div class="toast-header text-white bg-success">
-                        <i class="fa-solid fa-square-check"></i> <strong clas=me-auto> [[#{atencion}]]</strong>
+                
+                <hr class="my-5" style="border-color: #333;">
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="text-light mb-0">
+                            &copy; 2024 Legado Barbería. [[#{plantilla.derechos}]]
+                        </p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <p class="text-light mb-0">
+                            <a href="#" class="text-light text-decoration-none me-3">Política de Privacidad</a>
+                            <a href="#" class="text-light text-decoration-none">Términos y Condiciones</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        
+        <!-- Toast Fragment -->
+        <section th:fragment="mostrarToast">
+            <div aria-live="polite" aria-atomic="true" 
+                 class="position-fixed bottom-0 end-0 p-3" style="z-index: 1090;">                
+                <div th:if="${error}" class="toast show" role="alert" data-bs-autohide="true">
+                    <div class="toast-header bg-danger text-white">
+                        <i class="fa-solid fa-triangle-exclamation me-2"></i> 
+                        <strong class="me-auto">Error</strong>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
                     </div>
                     <div class="toast-body">
-                        <p>[[${todoOk}]]</p>
-                        <div class="mt-2 pt-2 border-top text-center">
-                            <button type="button" class="btn btn-secondary btn-sm" 
-                                    data-bs-dismiss="toast">[[#{accion.cerrar}]]</button>
-                        </div>
+                        [[${error}]]
+                    </div>
+                </div>
+                <div th:if="${todoOk}" class="toast show" role="status" data-bs-autohide="true">
+                    <div class="toast-header bg-success text-white">
+                        <i class="fa-solid fa-check-circle me-2"></i> 
+                        <strong class="me-auto">Éxito</strong>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+                    </div>
+                    <div class="toast-body">
+                        [[${todoOk}]]
                     </div>
                 </div>
             </div>
         </section>
         
-   
-     
+        <!-- Scripts adicionales -->
+        <script>
+            // Smooth scroll para anclas
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+            
+            // Navbar scroll effect
+            window.addEventListener('scroll', function() {
+                const navbar = document.querySelector('.navbar');
+                if (window.scrollY > 100) {
+                    navbar.classList.add('navbar-scrolled');
+                } else {
+                    navbar.classList.remove('navbar-scrolled');
+                }
+            });
+            
+            // Inicializar tooltips
+            $(function () {
+                $('[data-bs-toggle="tooltip"]').tooltip();
+            });
+        </script>
     </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

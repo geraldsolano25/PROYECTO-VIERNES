@@ -1,6 +1,7 @@
 package com.proyecto.repository;
 
 import com.proyecto.domain.Ruta;
+import com.proyecto.domain.Ruta;
 import com.proyecto.domain.Usuario;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;

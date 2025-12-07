@@ -1,8 +1,6 @@
 package com.proyecto.service;
 
-import com.proyecto.domain.Rol;
 import com.proyecto.domain.Usuario;
-import com.proyecto.repository.RolRepository;
 import com.proyecto.repository.UsuarioRepository;
 import java.io.IOException;
 import java.util.List;
@@ -17,16 +15,16 @@ import org.springframework.web.multipart.MultipartFile;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
-    private final RolRepository rolRepository;
+ 
     private final FirebaseStorageService firebaseStorageService;
     private final PasswordEncoder passwordEncoder;
 
     public UsuarioService(UsuarioRepository usuarioRepository,
-            RolRepository rolRepository,
+
             FirebaseStorageService firebaseStorageService,
             PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
-        this.rolRepository = rolRepository;
+    
         this.firebaseStorageService = firebaseStorageService;
         this.passwordEncoder = passwordEncoder;
     }
@@ -115,10 +113,7 @@ public class UsuarioService {
             } catch (IOException e) {
             }
         }
-        if (asignarRol) {
-            //Si se está creando el usuario, se crea el rol por defecto "USER"
-            asignarRolPorUsername(usuario.getUsername(), "USER");
-        }
+
     }
 
     @Transactional
@@ -138,43 +133,6 @@ public class UsuarioService {
         }
     }
 
-    @Transactional
-    public Usuario asignarRolPorUsername(String username, String rolStr) {
-        Optional<Usuario> usuarioOpt = usuarioRepository.findByUsername(username);
-        if (usuarioOpt.isEmpty()) {
-            throw new RuntimeException("Usuario no encontrado: " + username);
-        }
-        Usuario usuario = usuarioOpt.get();
-        Optional<Rol> rolOpt = rolRepository.findByRol(rolStr);
-        if (rolOpt.isEmpty()) {
-            throw new RuntimeException("Rol no encontrado.");
-        }
-        Rol rol = rolOpt.get();
-        usuario.getRoles().add(rol);
-        return usuarioRepository.save(usuario);
-    }
-     //Sección para gestionar roles a usuarios...
-    
-    @Transactional(readOnly = true)
-    public List<String> getRolesNombres() {
-        // Retorna una lista de Strings con el nombre de cada rol
-        return rolRepository.findAll().stream()
-                .map(Rol::getRol)
-                .toList();
-    }
+ 
 
-    @Transactional
-    public Usuario eliminarRol(String username, Integer idRol) {
-        Optional<Usuario> usuarioOpt = usuarioRepository.findByUsername(username);
-        if (usuarioOpt.isEmpty()) {
-            throw new RuntimeException("Usuario no encontrado: " + username);
-        }
-        Usuario usuario = usuarioOpt.get();
-
-        // Filtra la colección de roles del usuario para mantener solo los que NO coinciden con idRol
-        usuario.getRoles().removeIf(rol -> rol.getIdRol().equals(idRol));
-
-        // Guarda el usuario con la colección de roles modificada
-        return usuarioRepository.save(usuario);
-    }
 }

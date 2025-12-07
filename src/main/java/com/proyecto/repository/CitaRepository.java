@@ -3,8 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.proyecto.repository;
-
-import java.math.BigDecimal;
+import com.proyecto.domain.Cita;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+
+public interface CitaRepository extends JpaRepository<Cita, Long> {
+    List<Cita> findByClienteId(Long clienteId);
+    List<Cita> findByEstado(String estado);
+}

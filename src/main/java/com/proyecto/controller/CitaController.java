@@ -3,10 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.proyecto.controller;
-import com.proyecto.domain.Cliente;
+import com.proyecto.domain.Cita;
+import com.proyecto.service.CitaService;
 import com.proyecto.service.ClienteService;
 import jakarta.validation.Valid;
-import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,83 +21,84 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller 
-@RequestMapping("/cliente")
-public class ClienteController {
+@RequestMapping("/cita")
+public class CitaController {
   
+    private final CitaService citaService;
     private final ClienteService clienteService;
     private final MessageSource messageSource;
 
     @Autowired
-    public ClienteController(ClienteService clienteService, MessageSource messageSource) {
+    public CitaController(CitaService citaService, ClienteService clienteService, MessageSource messageSource) {
+        this.citaService = citaService;
         this.clienteService = clienteService;
         this.messageSource = messageSource;
     }
     
     @GetMapping("/listado")
     public String listado(Model model) {
+        var citas = citaService.getCitas();
+        model.addAttribute("citas", citas);
+        model.addAttribute("totalCitas", citas.size());
+
+        // AGREGAR ESTA LÍNEA:
         var clientes = clienteService.getClientes();
-        model.addAttribute("clientes", clientes);
-        model.addAttribute("totalClientes", clientes.size());
-        return "/cliente/listado";
+        model.addAttribute("clientes", clientes);  // Agregar clientes al modelo para el modal
+
+        return "/cita/listado";
     }
-    
     @GetMapping("/nuevo")
-    public String nuevo(Cliente cliente) {
-        return "/cliente/modifica";
+    public String nuevo(Model model) {
+        // OBTENER LOS CLIENTES PARA EL COMBO
+        var clientes = clienteService.getClientes();
+        model.addAttribute("cita", new Cita());
+        model.addAttribute("clientes", clientes);  // Agregar clientes al modelo
+        return "/cita/modifica";
     }
     
     @PostMapping("/guardar")
-    public String guardar(@Valid Cliente cliente, RedirectAttributes redirectAttributes) {
-        clienteService.save(cliente);
+    public String guardar(@Valid Cita cita, RedirectAttributes redirectAttributes) {
+        citaService.save(cita);
         redirectAttributes.addFlashAttribute("todoOk",
             messageSource.getMessage("mensaje.actualizado", null, Locale.getDefault()));
-        return "redirect:/cliente/listado";
+        return "redirect:/cita/listado";
     }
     
     @PostMapping("/eliminar")
-    public String eliminar(@RequestParam Long idCliente, RedirectAttributes redirectAttributes) {
+    public String eliminar(@RequestParam Long idCita, RedirectAttributes redirectAttributes) {
         String titulo = "todoOk";
         String mensaje = "mensaje.eliminado";
         try {
-            clienteService.delete(idCliente);
+            citaService.delete(idCita);
         } catch (IllegalArgumentException e) {
             titulo = "error";
-            mensaje = "cliente.error01"; // Cliente no encontrado
+            mensaje = "cita.error01";
         } catch (IllegalStateException e) {
             titulo = "error";
-            mensaje = "cliente.error02"; // No se puede eliminar por datos asociados
+            mensaje = "cita.error02";
         } catch (Exception e) {
             titulo = "error";
-            mensaje = "cliente.error03"; // Error general
+            mensaje = "cita.error03";
         }
         redirectAttributes.addFlashAttribute(titulo,
             messageSource.getMessage(mensaje, null, Locale.getDefault()));
-        return "redirect:/cliente/listado";
+        return "redirect:/cita/listado";
     }
     
-    @GetMapping("/modificar/{idCliente}")
-    public String modificar(@PathVariable("idCliente") Long idCliente,
+    @GetMapping("/modificar/{idCita}")
+    public String modificar(@PathVariable("idCita") Long idCita,
             RedirectAttributes redirectAttributes, Model model) {
-        Optional<Cliente> clienteOpt = clienteService.getClienteOptional(idCliente);
-        if(clienteOpt.isEmpty()) {
+        Optional<Cita> citaOpt = citaService.getCitaOptional(idCita);
+        if(citaOpt.isEmpty()) {
             redirectAttributes.addFlashAttribute("error",
-                messageSource.getMessage("cliente.error01", null, Locale.getDefault()));
-            return "redirect:/cliente/listado";
+                messageSource.getMessage("cita.error01", null, Locale.getDefault()));
+            return "redirect:/cita/listado";
         }
-        model.addAttribute("cliente", clienteOpt.get());
-        return "/cliente/modifica";
-    }
-    
-    @GetMapping("/buscar")
-    public String buscar(@RequestParam(required = false) String nombre, Model model) {
-        List<Cliente> clientes;
-        if (nombre != null && !nombre.trim().isEmpty()) {
-            clientes = clienteService.searchByNombre(nombre);
-        } else {
-            clientes = clienteService.getClientes();
-        }
-        model.addAttribute("clientes", clientes);
-        model.addAttribute("totalClientes", clientes.size());
-        return "/cliente/listado";
+        
+        // OBTENER LOS CLIENTES PARA EL COMBO
+        var clientes = clienteService.getClientes();
+        model.addAttribute("cita", citaOpt.get());
+        model.addAttribute("clientes", clientes);  // Agregar clientes al modelo
+        return "/cita/modifica";
     }
 }
