@@ -258,9 +258,13 @@
                     </button>
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <ul class="navbar-nav">
-                            <li class="nav-item"><a class="nav-link" th:href="@{/categoria/listado}">[[#{plantilla.categorias}]]</a></li>
+                            <li class="nav-item"><a class="nav-link" th:href="@{/sucursal/listado}">[[#{plantilla.sucursal}]]</a></li>
                             <li class="nav-item"><a class="nav-link" th:href="@{/producto/listado}">[[#{plantilla.productos}]]</a></li>
                             <li class="nav-item"><a class="nav-link" th:href="@{/consultas/listado}">[[#{plantilla.consultas}]]</a></li>
+                              <li class="nav-item"><a class="nav-link" th:href="@{/cita/formulario}">[[#{plantilla.citas}]]</a></li>
+                            <li class="nav-item"><a class="nav-link" th:href="@{/cita/listado}">[[#{plantilla.agendar}]]</a></li>
+                         
+                            
                             <li class="nav-item dropdown" sec:authorize="hasRole('ROLE_ADMIN') or hasRole('ROLE_VENDEDOR')">
                                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
                                     <i class="fas fa-cog me-1"></i>[[#{plantilla.admin}]]
@@ -337,14 +341,15 @@
             </section>
         </header>
 
-        <footer th:fragment="footer" class="p-4 mt-5 bg-info text-white d-print-none">
-            <div class="container">
-                <p class="lead text-center mb-0">[[#{plantilla.derechos}]] &copy; <span id="currentYear"></span></p>
-                <p class="text-center mt-2" style="color: var(--light-text); font-size: 0.9rem;">
-                    La mejor experiencia en barbería desde 1990
-                </p>
-            </div>
-        </footer>
+    <footer th:fragment="footer" class="p-4 mt-5 bg-dark text-white d-print-none">
+    <div class="container">
+        <p class="lead text-center mb-0">[[#{plantilla.derechos}]] &copy; <span id="currentYear"></span></p>
+        <p class="text-center mt-2" style="color: #d4af37; font-size: 0.9rem;">
+            La mejor experiencia en barbería desde 1990
+        </p>
+    </div>
+</footer>
+
         
         <script>
             document.addEventListener('DOMContentLoaded', function() {

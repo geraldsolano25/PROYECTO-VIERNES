@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{general/fragmentos :: head}">
+        <title>TechShop - Sucursales</title>
+        <meta charset="UTF-8"/>
+    </head>
+    <body>
+        <header th:replace="~{general/fragmentos :: header}"/>
+        
+        <!-- Script JavaScript para manejar el modal de confirmación -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const confirmModal = document.getElementById('confirmModal');
+                if (confirmModal) {
+                    confirmModal.addEventListener('show.bs.modal', function(event) {
+                        const button = event.relatedTarget;
+                        const id = button.getAttribute('th:data-bs-id');
+                        const nombre = button.getAttribute('th:data-bs-nombre');
+                        
+                        const modalIdInput = confirmModal.querySelector('#modalId');
+                        const modalNombreSpan = confirmModal.querySelector('#modalNombre');
+                        
+                        modalIdInput.value = id;
+                        modalNombreSpan.textContent = nombre;
+                    });
+                }
+            });
+        </script>
+      
+        <section th:replace="~{sucursal/fragmentos :: agregar}"/>
+        <section th:replace="~{sucursal/fragmentos :: listado}"/>
+        <section th:replace="~{sucursal/fragmentos :: confirmarEliminar}"/>
+        <section th:replace="~{general/fragmentos :: mostrarToast}"/>
+        
+        <footer th:replace="~{general/fragmentos :: footer}"/>
+    </body>
+</html>
