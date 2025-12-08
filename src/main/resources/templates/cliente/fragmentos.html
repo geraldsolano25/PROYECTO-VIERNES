@@ -38,8 +38,8 @@
                               class='was-validated' method="post">
                             <div class="modal-body">
                                 <div class='mb-3'>
-                                    <label>[[#{cliente.nombreCompleto}]]</label>
-                                    <input type="text" name='nombreCompleto' class='form-control' required="true"/></div>
+                                    <label>[[#{cliente.nombre}]]</label>
+                                    <input type="text" name='nombre' class='form-control' required="true"/></div>  <!-- CAMBIADO -->
                                 <div class='mb-3'>
                                     <label>[[#{cliente.telefono}]]</label>
                                     <input type="text" name='telefono' class='form-control'/></div>
@@ -69,7 +69,7 @@
                             <div th:if="${clientes != null and !clientes.empty}">
                                 <table class="table table-striped table-hover">
                                     <thead><tr><th>#</th>
-                                            <th>[[#{cliente.nombreCompleto}]]</th>
+                                            <th>[[#{cliente.nombre}]]</th>
                                             <th>[[#{cliente.telefono}]]</th>
                                             <th>[[#{cliente.email}]]</th>
                                             <th></th>
@@ -77,18 +77,18 @@
                                     </thead>
                                     <tbody>
                                         <tr th:each="c : ${clientes}">
-                                            <td>[[${c.id}]]</td>
-                                            <td>[[${c.nombreCompleto}]]</td>
+                                            <td>[[${c.idCliente}]]</td>
+                                            <td>[[${c.nombre}]]</td>
                                             <td>[[${c.telefono}]]</td>
                                             <td>[[${c.email}]]</td>
                                             <td sec:authorize="hasRole('ROLE_ADMIN')">
                                                 <button type="button" class="btn btn-danger"
                                                         data-bs-toggle="modal" data-bs-target="#confirmModal"
-                                                        th:data-bs-id="${c.id}"
-                                                        th:data-bs-nombre="${c.nombreCompleto}">
+                                                        th:data-bs-id="${c.idCliente}"
+                                                        th:data-bs-nombre="${c.nombre}">  <!-- CAMBIADO -->
                                                     <i class="fa-solid fa-trash"></i> [[#{accion.eliminar}]]
                                                 </button>                                           
-                                                <a th:href="@{/cliente/modificar/}+${c.id}" class="btn btn-warning">
+                                                <a th:href="@{/cliente/modificar/}+${c.idCliente}" class="btn btn-warning">
                                                     <i class="fas fa-pencil-alt"></i> [[#{accion.actualizar}]]
                                                 </a>                                                
                                             </td>
@@ -116,7 +116,7 @@
                 <div class="col-md-8">
                     <form method="POST" th:action="@{/cliente/guardar}" 
                           th:object="${cliente}" class="was-validated">
-                        <input type="hidden" name="id" th:field="*{id}"/>
+                        <input type="hidden" name="idCliente" th:field="*{idCliente}"/>  <!-- CAMBIADO -->
                         <div class="row py-4 mb-4 bg-light">
                             <div class="col-md-4 d-grid">
                                 <a th:href="@{/cliente/listado}" class="btn btn-primary">
@@ -133,9 +133,9 @@
                                     <div class="card-header"><h4>[[#{accion.actualizar}]]</h4></div>
                                     <div class="card-body">
                                         <div class="mb-3">
-                                            <label for="nombreCompleto">[[#{cliente.nombreCompleto}]]</label>
-                                            <input type="text" class="form-control" name="nombreCompleto" 
-                                                   th:field="*{nombreCompleto}" required="true"/>
+                                            <label for="nombre">[[#{cliente.nombre}]]</label>  <!-- CAMBIADO -->
+                                            <input type="text" class="form-control" name="nombre"  <!-- CAMBIADO -->
+                                                   th:field="*{nombre}" required="true"/>  <!-- CAMBIADO -->
                                         </div>
                                         <div class="mb-3">
                                             <label for="telefono">[[#{cliente.telefono}]]</label>

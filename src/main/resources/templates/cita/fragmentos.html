@@ -6,14 +6,7 @@
         <!-- fragmento 1 para Agregar cita en ventana modal -->
         <section th:fragment="agregar">
             <!-- Button trigger modal -->
-            <div class='row py-4 mb-2 bg-light'>
-                <div class='col-md-1'></div>
-                <div class='col-md-3'>
-                    <button type="button" class="btn btn-primary" sec:authorize="hasRole('ROLE_ADMIN')"
-                            data-bs-toggle="modal" data-bs-target="#agregarCitaModal">
-                        <i class="fa-solid fa-plus"></i> Agregar Cita</button>
-                </div>
-            </div>
+    
             <!-- Modal -->
             <div class="modal fade" id="agregarCitaModal" tabindex="-1" 
                  aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -105,30 +98,7 @@
                         <div class="card-header">
                             <h4>Listado de Citas</h4>
                             <!-- Filtro por fecha -->
-                            <form th:action="@{/cita/listado}" method="get" class="row g-3 mt-2">
-                                <div class="col-md-4">
-                                    <input type="date" name="fecha" class="form-control" 
-                                           th:value="${fechaFiltro != null ? fechaFiltro.toString() : ''}"
-                                           id="filtroFecha"/>
-                                </div>
-                                <div class="col-md-2">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fa-solid fa-filter"></i> Filtrar
-                                    </button>
-                                    <a th:href="@{/cita/listado}" class="btn btn-secondary">
-                                        <i class="fa-solid fa-rotate"></i> Limpiar
-                                    </a>
-                                </div>
-                                <div class="col-md-3">
-                                    <select name="estado" class="form-control" onchange="this.form.submit()">
-                                        <option value="">Todos los estados</option>
-                                        <option th:each="estadoOpt : ${estados}"
-                                                th:value="${estadoOpt}"
-                                                th:selected="${estadoFiltro == estadoOpt}"
-                                                th:text="${estadoOpt}"></option>
-                                    </select>
-                                </div>
-                            </form>
+                           
                         </div>
                         <div class="card-body">
                             <div th:if="${citas != null and !citas.empty}">
@@ -184,26 +154,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="card text-center bg-primary text-white mb-3">
-                        <div class="card-body">
-                            <h3>Total Citas</h3>
-                            <h4 class="fs-2"><i class="fas fa-calendar-check"></i> [[${totalCitas}]]</h4>
-                        </div>
-                    </div>
-                    <div class="card text-center bg-success text-white mb-3">
-                        <div class="card-body">
-                            <h5>Citas Hoy</h5>
-                            <h4 class="fs-2"><i class="fas fa-clock"></i> [[${citasHoy}]]</h4>
-                        </div>
-                    </div>
-                    <div class="card text-center bg-warning text-white">
-                        <div class="card-body">
-                            <h5>Citas Pendientes</h5>
-                            <h4 class="fs-2"><i class="fas fa-hourglass-half"></i> [[${citasPendientes}]]</h4>
-                        </div>
-                    </div>
-                </div>
+              
             </div>
             
             <script>

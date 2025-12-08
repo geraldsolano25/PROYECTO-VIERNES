@@ -23,6 +23,10 @@
                 padding: 12px;
                 font-size: 18px;
             }
+            .btn-new-client {
+                margin-top: 5px;
+                float: right;
+            }
         </style>
     </head>
     <body>
@@ -35,25 +39,37 @@
                     <p class="text-muted">Complete el formulario para agendar su cita</p>
                 </div>
                 
-                <form th:action="@{/cita/guardar}" method="post" class="was-validated">
+                <form th:action="@{/cita/guardar}" method="post" class="was-validated" th:object="${cita}">
                     <div class="row">
                         <div class="col-md-12 mb-3">
                             <label for="fechaHora" class="form-label">Fecha y Hora *</label>
-                            <input type="datetime-local" class="form-control" id="fechaHora" name="fechaHora" required>
+                            <input type="datetime-local" class="form-control" id="fechaHora" 
+                                   th:field="*{fechaHora}" required>
                             <div class="invalid-feedback">Por favor seleccione fecha y hora.</div>
                         </div>
                     </div>
                     
                     <div class="mb-3">
                         <label for="cliente" class="form-label">Cliente *</label>
-                        <input type="text" class="form-control" id="cliente" name="cliente" 
-                               placeholder="Ingrese su nombre completo" required>
-                        <div class="invalid-feedback">Por favor ingrese su nombre.</div>
+                        <div class="input-group">
+                            <select class="form-control" id="cliente" name="cliente.id" required>
+                                <option value="">-- Seleccione un cliente --</option>
+                                <option th:each="cliente : ${clientesActivos}"
+                                        th:value="${cliente.id}"
+                                        th:text="${cliente.nombre + ' (' + cliente.email + ')'}">
+                                </option>
+                            </select>
+                            <a th:href="@{/cliente/nuevo}" class="btn btn-outline-primary btn-new-client" 
+                               title="Agregar nuevo cliente">
+                                <i class="fa-solid fa-user-plus"></i>
+                            </a>
+                        </div>
+                        <div class="invalid-feedback">Por favor seleccione un cliente.</div>
                     </div>
                     
                     <div class="mb-3">
                         <label for="servicio" class="form-label">Servicio *</label>
-                        <select class="form-control" id="servicio" name="servicio" required>
+                        <select class="form-control" id="servicio" th:field="*{servicio}" required>
                             <option value="">-- Seleccione un servicio --</option>
                             <option value="Reparación de computadoras">Reparación de computadoras</option>
                             <option value="Mantenimiento preventivo">Mantenimiento preventivo</option>
@@ -76,18 +92,22 @@
                         <div class="invalid-feedback">Por favor seleccione una sucursal.</div>
                     </div>
                     
-                    <input type="hidden" name="estado" value="PENDIENTE">
-                    
-                    <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="notificacion" name="notificacion" checked>
-                        <label class="form-check-label" for="notificacion">Recibir notificación por correo</label>
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="descripcion" th:field="*{descripcion}" 
+                                  rows="3" placeholder="Detalles adicionales sobre la cita"></textarea>
                     </div>
+                    
+                    <input type="hidden" th:field="*{estado}" value="PENDIENTE">
                     
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-primary btn-submit">
                             <i class="fa-solid fa-calendar-check"></i> Confirmar Cita
                         </button>
-                        <a th:href="@{/}" class="btn btn-secondary">
+                        <a th:href="@{/cita/listado}" class="btn btn-secondary">
+                            <i class="fa-solid fa-list"></i> Ver Listado
+                        </a>
+                        <a th:href="@{/}" class="btn btn-outline-secondary">
                             <i class="fa-solid fa-home"></i> Inicio
                         </a>
                     </div>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{general/fragmentos :: head}">
+        <title>Servicios</title>
+        <meta charset="UTF-8"/>
+    </head>
+    <body>
+        <header th:replace="~{general/fragmentos :: header}"/>
+        
+        <!-- Mensajes de éxito/error -->
+        <div th:if="${todoOk}" class="container mt-3">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <span th:text="${todoOk}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+        
+        <div th:if="${error}" class="container mt-3">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span th:text="${error}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+        
+        <main class="container-fluid">
+            <section th:replace="~{servicio/fragmentos :: agregar}"/>
+            <section th:replace="~{servicio/fragmentos :: listado}"/>
+            <section th:replace="~{servicio/fragmentos :: confirmarEliminar}"/>
+        </main>
+        
+        <section th:replace="~{general/fragmentos :: mostrarToast}"/>
+        <footer th:replace="~{general/fragmentos :: footer}"/>
+        
+        <!-- Incluir scripts específicos de servicios -->
+        <div th:replace="~{servicio/fragmentos :: scripts}"></div>
+    </body>
+</html>

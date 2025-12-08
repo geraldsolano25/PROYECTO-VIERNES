@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{general/fragmentos :: head}">
+        <title>Modificar Servicio</title>
+        <meta charset="UTF-8"/>
+    </head>
+    <body>
+        <header th:replace="~{general/fragmentos :: header}"/>
+        
+        <!-- Mensajes de error -->
+        <div th:if="${Error}" class="container mt-3">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span th:text="${Error}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+        
+        <main class="container-fluid">
+            <section th:replace="~{servicio/fragmentos :: editar}"/>
+        </main>
+        
+        <footer th:replace="~{general/fragmentos :: footer}"/>
+        
+        <!-- Incluir scripts específicos de servicios -->
+        <div th:replace="~{servicio/fragmentos :: scripts}"></div>
+    </body>
+</html>

@@ -1,12 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package com.tienda_vm.controller;
 
 import com.tienda_vm.domain.Cita;
 import com.tienda_vm.domain.Sucursal;
 import com.tienda_vm.service.CitaService;
+import com.tienda_vm.service.ClienteService;
 import com.tienda_vm.service.SucursalService;
 import jakarta.validation.Valid;
 import java.time.LocalDate;
@@ -34,6 +32,9 @@ public class CitaController {
     
     @Autowired
     private SucursalService sucursalService;
+    
+    @Autowired
+    private ClienteService clienteService;
     
     @Autowired
     private MessageSource messageSource;
@@ -79,12 +80,18 @@ public class CitaController {
         return "/cita/listado";
     }
     
-   @GetMapping("/formulario")
+    @GetMapping("/formulario")
     public String formulario(Model model) {
         var sucursalesActivas = sucursalService.getSucursales(true);
+        var clientesActivos = clienteService.getClientesActivos();
+        
         model.addAttribute("sucursalesActivas", sucursalesActivas);
+        model.addAttribute("clientesActivos", clientesActivos);
+        model.addAttribute("cita", new Cita());
+        
         return "/cita/formulario";
     }
+    
     @PostMapping("/guardar")
     public String guardar(@Valid Cita cita, RedirectAttributes redirectAttributes) {
         citaService.save(cita);
@@ -120,9 +127,11 @@ public class CitaController {
         try {
             Cita cita = citaService.getCita(idCita);
             var sucursalesActivas = sucursalService.getSucursales(true);
+            var clientesActivos = clienteService.getClientesActivos();
             
             model.addAttribute("cita", cita);
             model.addAttribute("sucursalesActivas", sucursalesActivas);
+            model.addAttribute("clientesActivos", clientesActivos);
             model.addAttribute("estados", List.of("PENDIENTE", "CONFIRMADA", "COMPLETADA", "CANCELADA"));
             
             return "/cita/modifica";
