@@ -9,39 +9,64 @@
         <header th:replace="~{general/fragmentos :: header}"/>
         <div class="row my-5">
             <div class="col-md-4 offset-md-4">
-                <div class="card">
-                    <div class="card-header bg-success text-white text-center">
-                        <h2>[[#{login.login}]]</h2>
+                <div class="card border-0 shadow-lg">
+                    <div class="card-header text-white text-center py-4" style="background: linear-gradient(135deg, #2c3e50 0%, #4a6491 100%);">
+                        <h2 class="mb-0" style="font-weight: 300; letter-spacing: 1px;">[[#{login.login}]]</h2>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body p-5" style="background-color: #f8f9fa;">
                         <form method="POST" th:action="@{/login}">
                             <!-- Formulario y campos -->
-                            <div class="row my-3">
-                                <label for="username" class="col-md-1 my-auto"><i class="fas fa-user-lock"></i></label>
+                            <div class="row mb-4">
+                                <label for="username" class="col-md-1 my-auto" style="color: #2c3e50;"><i class="fas fa-user-lock"></i></label>
                                 <div class="col-md-11 my-auto">
-                                    <input class="form-control" id="username" type="text" name="username" th:placeholder="#{login.username}"/>
+                                    <input class="form-control py-3 border-0 shadow-sm" 
+                                           id="username" 
+                                           type="text" 
+                                           name="username" 
+                                           th:placeholder="#{login.username}"
+                                           style="background-color: #ffffff; border-radius: 8px;"/>
                                 </div>
                             </div>
-                            <div class="row my-3">
-                                <label for="password" class="col-md-1 my-auto"><i class="fas fa-key"></i></label>
+                            <div class="row mb-4">
+                                <label for="password" class="col-md-1 my-auto" style="color: #2c3e50;"><i class="fas fa-key"></i></label>
                                 <div class="col-md-11 my-auto">
-                                    <input class="form-control" id="password" type="password" name="password" th:placeholder="#{login.password}"/>
+                                    <input class="form-control py-3 border-0 shadow-sm" 
+                                           id="password" 
+                                           type="password" 
+                                           name="password" 
+                                           th:placeholder="#{login.password}"
+                                           style="background-color: #ffffff; border-radius: 8px;"/>
                                 </div>
                             </div>                            
                             <!-- Botones y enlaces -->
-                            <div class="d-flex justify-content-around mt-4">
+                            <div class="d-flex justify-content-around mt-5">
                                 <!-- Enlace de registro (con estilo de botón) -->
-                                <a th:href="@{/registro/nuevo}" class="btn btn-primary"><i class="fas fa-user-plus"></i> [[#{accion.registrar}]]</a>                                
+                                <a th:href="@{/registro/nuevo}" 
+                                   class="btn px-4 py-2 shadow-sm border-0" 
+                                   style="background-color: #2c3e50; color: white; border-radius: 8px;">
+                                    <i class="fas fa-user-plus"></i> [[#{accion.registrar}]]
+                                </a>                                
                                 <!-- Enlace para recordar contraseña -->
-                                <a th:href="@{/registro/recordar}" class="btn btn-info"><i class="fas fa-envelope"></i> [[#{accion.recordar}]]</a>                                
+                                <a th:href="@{/registro/recordar}" 
+                                   class="btn px-4 py-2 shadow-sm border-0" 
+                                   style="background-color: #4a6491; color: white; border-radius: 8px;">
+                                    <i class="fas fa-envelope"></i> [[#{accion.recordar}]]
+                                </a>                                
                                 <!-- Botón para enviar el formulario -->
-                                <button class="btn btn-success" type="submit"><i class="fas fa-sign-in-alt"></i> [[#{login.login}]]</button>
+                                <button class="btn px-4 py-2 shadow-sm border-0" 
+                                        type="submit"
+                                        style="background: linear-gradient(135deg, #4a6491 0%, #2c3e50 100%); color: white; border-radius: 8px;">
+                                    <i class="fas fa-sign-in-alt"></i> [[#{login.login}]]
+                                </button>
                             </div>
                         </form>
                     </div>
                 </div>
                 <!-- Manejo de Errores -->
-                <div th:if="${param.error != null}" class="alert alert-danger mt-3 text-center" role="alert">
+                <div th:if="${param.error != null}" 
+                     class="alert mt-3 text-center border-0 shadow-sm" 
+                     role="alert"
+                     style="background-color: #e74c3c; color: white; border-radius: 8px;">
                     [[#{error.login}]]
                 </div>
             </div>
