@@ -3,59 +3,124 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
     <body>
-        <!-- fragmento 1 para Agregar cita en ventana modal -->
+        <!-- Fragmento 1: Botón y modal para agregar cita (SIMPLIFICADO) -->
         <section th:fragment="agregar">
-            <!-- Button trigger modal -->
-    
-            <!-- Modal -->
-            <div class="modal fade" id="agregarCitaModal" tabindex="-1" 
-                 aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header bg-info text-white">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">
-                                <i class="fa-solid fa-calendar-plus"></i> Agregar Cita</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class='row py-4 mb-2 bg-light'>
+                <div class='col-md-1'></div>
+                <div class='col-md-3'>
+                    <button type="button" class="btn btn-primary" 
+                            data-bs-toggle="modal" data-bs-target="#agregarCitaModal">
+                        <i class="fa-solid fa-calendar-plus"></i> Agregar Cita
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fragmento 2: Listado de citas (SIMPLIFICADO) -->
+        <section th:fragment="listado">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="mb-0"><i class="fa-solid fa-list"></i> Listado de Citas</h4>
+                </div>
+                <div class="card-body">
+                    <div th:if="${citas != null and !citas.empty}">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover table-bordered">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Fecha</th>
+                                        <th>Hora</th>
+                                        <th>Cliente</th>
+                                        <th>Servicio</th>
+                                        <th>Sucursal</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="c : ${citas}">
+                                        <td th:text="${c.id}"></td>
+                                        <td th:text="${#temporals.format(c.fechaHora, 'dd/MM/yyyy')}"></td>
+                                        <td th:text="${#temporals.format(c.fechaHora, 'HH:mm')}"></td>
+                                        <td th:text="${c.cliente}"></td>
+                                        <td th:text="${c.servicio}"></td>
+                                        <td>
+                                            <span class="badge bg-secondary" 
+                                                  th:text="${c.sucursal != null ? c.sucursal.nombre : 'N/A'}"></span>
+                                        </td>
+                                        <td>
+                                            <span th:if="${c.estado == 'PENDIENTE'}" 
+                                                  class="badge bg-warning">Pendiente</span>
+                                            <span th:if="${c.estado == 'CONFIRMADA'}" 
+                                                  class="badge bg-success">Confirmada</span>
+                                            <span th:if="${c.estado == 'COMPLETADA'}" 
+                                                  class="badge bg-info">Completada</span>
+                                            <span th:if="${c.estado == 'CANCELADA'}" 
+                                                  class="badge bg-danger">Cancelada</span>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a th:href="@{/cita/modificar/} + ${c.id}" 
+                                                   class="btn btn-warning btn-sm">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <button type="button" class="btn btn-danger btn-sm"
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#confirmModal"
+                                                        th:data-bs-id="${c.id}"
+                                                        th:data-bs-cliente="${c.cliente}">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <form th:action='@{/cita/guardar}' method='post' class='was-validated'>
-                            <div class="modal-body">
-                                <div class='mb-3'>
-                                    <label>Fecha y Hora</label>
-                                    <input type="datetime-local" name='fechaHora' class='form-control' required="true"
-                                           id="modalFechaHora"/>
-                                </div>
-                                <div class='mb-3'>
-                                    <label>Cliente</label>
-                                    <input type="text" name='cliente' class='form-control' required="true"/>
-                                </div>
-                                <div class='mb-3'>
-                                    <label>Servicio</label>
-                                    <input type="text" name='servicio' class='form-control' required="true"/>
-                                </div>
-                                <div class='mb-3'>
-                                    <label>Estado</label>
-                                    <select name='estado' class='form-control' required="true">
-                                        <option value="PENDIENTE" selected>Pendiente</option>
-                                        <option value="CONFIRMADA">Confirmada</option>
-                                        <option value="COMPLETADA">Completada</option>
-                                        <option value="CANCELADA">Cancelada</option>
-                                    </select>
-                                </div>
-                                <div class='mb-3'>
-                                    <label>Sucursal</label>
-                                    <select name='sucursal.id' class='form-control' required="true">
-                                        <option value="">-- Seleccione una sucursal --</option>
-                                        <option th:each="s : ${sucursalesActivas}"
-                                                th:value="${s.id}"
-                                                th:text="${s.nombre}"></option>
-                                    </select>
+                    </div>
+                    <div class="text-center p-5" th:if="${citas == null or citas.empty}">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle fa-2x mb-3"></i>
+                            <h4>No hay citas registradas</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fragmento 3: Modal de confirmación para eliminar (SIMPLIFICADO) -->
+        <section th:fragment="confirmarEliminar">
+            <div class="modal fade" id="confirmModal" tabindex="-1" 
+                 aria-labelledby="confirmModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <form th:action="@{/cita/eliminar}" method="post">
+                            <input type="hidden" name="idCita" id="modalId"/>
+                            
+                            <div class="modal-header bg-danger text-white">
+                                <h5 class="modal-title" id="confirmModalLabel">
+                                    <i class="fas fa-exclamation-triangle"></i> Confirmar Eliminación
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" 
+                                        data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            
+                            <div class="modal-body text-center">
+                                <div class="mb-3">
+                                    <i class="fas fa-trash-alt fa-4x text-danger mb-3"></i>
+                                    <h5>¿Está seguro de eliminar esta cita?</h5>
+                                    <p>Cliente: <strong id="modalCliente"></strong></p>
                                 </div>
                             </div>
+                            
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                    <i class="fa-solid fa-xmark"></i> Cerrar</button>
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fa-solid fa-floppy-disk"></i> Guardar</button>
+                                    <i class="fas fa-times"></i> Cancelar
+                                </button>
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fas fa-trash"></i> Sí, Eliminar
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -63,231 +128,20 @@
             </div>
             
             <script>
-                // Establecer fecha por defecto en el modal
                 document.addEventListener('DOMContentLoaded', function() {
-                    const modal = document.getElementById('agregarCitaModal');
-                    if (modal) {
-                        modal.addEventListener('show.bs.modal', function() {
-                            const fechaInput = document.getElementById('modalFechaHora');
-                            if (fechaInput) {
-                                // Calcular fecha de mañana a las 9:00 AM
-                                const manana = new Date();
-                                manana.setDate(manana.getDate() + 1);
-                                manana.setHours(9, 0, 0, 0);
-                                
-                                // Formatear para datetime-local
-                                const year = manana.getFullYear();
-                                const month = String(manana.getMonth() + 1).padStart(2, '0');
-                                const day = String(manana.getDate()).padStart(2, '0');
-                                const hours = String(manana.getHours()).padStart(2, '0');
-                                const minutes = String(manana.getMinutes()).padStart(2, '0');
-                                
-                                fechaInput.value = `${year}-${month}-${day}T${hours}:${minutes}`;
-                            }
+                    const confirmModal = document.getElementById('confirmModal');
+                    if (confirmModal) {
+                        confirmModal.addEventListener('show.bs.modal', function(event) {
+                            const button = event.relatedTarget;
+                            const id = button.getAttribute('data-bs-id');
+                            const cliente = button.getAttribute('data-bs-cliente');
+                            
+                            document.getElementById('modalId').value = id;
+                            document.getElementById('modalCliente').textContent = cliente || 'N/A';
                         });
                     }
                 });
             </script>
         </section>
-
-        <!-- fragmento 2 para el listado de citas -->
-        <section th:fragment="listado" class="p-3">
-            <div class="row p-3">
-                <div class="col-md-9">
-                    <div class="card p-2">
-                        <div class="card-header">
-                            <h4>Listado de Citas</h4>
-                            <!-- Filtro por fecha -->
-                           
-                        </div>
-                        <div class="card-body">
-                            <div th:if="${citas != null and !citas.empty}">
-                                <table class="table table-striped table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Fecha</th>
-                                            <th>Hora</th>
-                                            <th>Cliente</th>
-                                            <th>Servicio</th>
-                                            <th>Sucursal</th>
-                                            <th>Estado</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr th:each="c : ${citas}">
-                                            <td>[[${c.id}]]</td>
-                                            <td>
-                                                <span th:text="${#strings.substring(c.fechaHora.toString(), 0, 10)}"></span>
-                                            </td>
-                                            <td>
-                                                <span th:text="${#strings.substring(c.fechaHora.toString(), 11, 16)}"></span>
-                                            </td>
-                                            <td>[[${c.cliente}]]</td>
-                                            <td>[[${c.servicio}]]</td>
-                                            <td>[[${c.sucursal.nombre}]]</td>
-                                            <td>
-                                                <span th:if="${c.estado == 'PENDIENTE'}" class="badge bg-warning">Pendiente</span>
-                                                <span th:if="${c.estado == 'CONFIRMADA'}" class="badge bg-success">Confirmada</span>
-                                                <span th:if="${c.estado == 'COMPLETADA'}" class="badge bg-info">Completada</span>
-                                                <span th:if="${c.estado == 'CANCELADA'}" class="badge bg-danger">Cancelada</span>
-                                            </td>
-                                            <td sec:authorize="hasRole('ROLE_ADMIN')">
-                                                <button type="button" class="btn btn-danger"
-                                                        data-bs-toggle="modal" data-bs-target="#confirmModal"
-                                                        th:data-bs-id="${c.id}"
-                                                        th:data-bs-cliente="${c.cliente}">
-                                                    <i class="fa-solid fa-trash"></i> Eliminar
-                                                </button>                                           
-                                                <a th:href="@{/cita/modificar/}+${c.id}" class="btn btn-warning">
-                                                    <i class="fas fa-pencil-alt"></i> Modificar
-                                                </a>                                                
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="text-center p-2" th:if="${citas == null or citas.empty}">
-                                <span>No hay citas registradas</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-              
-            </div>
-            
-            <script>
-                // Establecer fecha actual por defecto en el filtro
-                document.addEventListener('DOMContentLoaded', function() {
-                    const filtroFecha = document.getElementById('filtroFecha');
-                    if (filtroFecha && !filtroFecha.value) {
-                        const hoy = new Date().toISOString().split('T')[0];
-                        filtroFecha.value = hoy;
-                    }
-                });
-            </script>
-        </section>
-
-        <!-- 3 Fragmento que se utiliza en la página modifica.html -->
-        <section th:fragment="editar">
-            <div class="row">
-                <div class="col-md-2"></div>
-                <div class="col-md-8">
-                    <form method="POST" th:action="@{/cita/guardar}" th:object="${cita}" class="was-validated">
-                        <input type="hidden" name="id" th:field="*{id}"/>
-                        <div class="row py-4 mb-4 bg-light">
-                            <div class="col-md-4 d-grid">
-                                <a th:href="@{/cita/listado}" class="btn btn-primary">
-                                    <i class="fas fa-arrow-left"></i> Regresar</a>
-                            </div>                                
-                            <div class="col-md-4 d-grid">
-                                <button type="submit" class="btn btn-success">
-                                    <i class="fas fa-check"></i> Guardar</button>
-                            </div>
-                        </div>                        
-                        <div class="row">
-                            <div class="col">
-                                <div class="card">
-                                    <div class="card-header"><h4>Modificar Cita</h4></div>
-                                    <div class="card-body">
-                                        <div class="mb-3">
-                                            <label for="fechaHora">Fecha y Hora</label>
-                                            <input type="datetime-local" class="form-control" name="fechaHora" 
-                                                   th:field="*{fechaHora}"
-                                                   required="true"/>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="cliente">Cliente</label>
-                                            <input type="text" class="form-control" name="cliente" 
-                                                   th:field="*{cliente}" required="true"/>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="servicio">Servicio</label>
-                                            <input type="text" class="form-control" name="servicio" 
-                                                   th:field="*{servicio}" required="true"/>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="estado">Estado</label>
-                                            <select name="estado" class="form-control" required="true">
-                                                <option value="PENDIENTE" th:selected="${cita?.estado == 'PENDIENTE'}">Pendiente</option>
-                                                <option value="CONFIRMADA" th:selected="${cita?.estado == 'CONFIRMADA'}">Confirmada</option>
-                                                <option value="COMPLETADA" th:selected="${cita?.estado == 'COMPLETADA'}">Completada</option>
-                                                <option value="CANCELADA" th:selected="${cita?.estado == 'CANCELADA'}">Cancelada</option>
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="sucursal">Sucursal</label>
-                                            <select name="sucursal.id" class="form-control" required="true">
-                                                <option value="">-- Seleccione una sucursal --</option>
-                                                <option th:each="s : ${sucursalesActivas}"
-                                                        th:value="${s.id}"
-                                                        th:selected="${cita?.sucursal != null and cita.sucursal.id == s.id}"
-                                                        th:text="${s.nombre}"></option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </section>
-
-        <!-- 4 fragmento que se utiliza para confirmar que se desea eliminar una cita -->
-        <section th:fragment="confirmarEliminar">
-            <div class="modal fade" 
-                 id="confirmModal" 
-                 tabindex="-1" 
-                 aria-labelledby="modalLabel" 
-                 aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered custom-modal-animation">
-                    <div class="modal-content animate-slide-up">
-                        <form th:action="@{/cita/eliminar}" method="post">
-                            <input type="hidden" name="idCita" id="modalId"/>
-                            <div class="modal-header bg-warning text-white">
-                                <h5 class="modal-title" id="modalLabel">
-                                    <i class="fa-solid fa-circle-radiation"></i> Confirmar Eliminación
-                                </h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                            </div>
-                            <div class="modal-body">
-                                <p>¿Está seguro que desea eliminar la cita del cliente <span id="modalCliente"></span>?</p>
-                                <h6>Esta acción no se puede deshacer</h6>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-danger">
-                                    <i class="fa-solid fa-trash"></i> Eliminar
-                                </button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                    <i class="fa-solid fa-xmark"></i> Cerrar
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Script para manejar el modal de confirmación -->
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const confirmModal = document.getElementById('confirmModal');
-                if (confirmModal) {
-                    confirmModal.addEventListener('show.bs.modal', function(event) {
-                        const button = event.relatedTarget;
-                        const id = button.getAttribute('data-bs-id');
-                        const cliente = button.getAttribute('data-bs-cliente');
-                        
-                        const modalIdInput = confirmModal.querySelector('#modalId');
-                        const modalClienteSpan = confirmModal.querySelector('#modalCliente');
-                        
-                        if (modalIdInput) modalIdInput.value = id;
-                        if (modalClienteSpan) modalClienteSpan.textContent = cliente;
-                    });
-                }
-            });
-        </script>
     </body>
 </html>

@@ -1,15 +1,11 @@
-
 package com.tienda_vm.controller;
 
 import com.tienda_vm.domain.Cita;
-import com.tienda_vm.domain.Sucursal;
 import com.tienda_vm.service.CitaService;
 import com.tienda_vm.service.ClienteService;
+import com.tienda_vm.service.ProductoService;
 import com.tienda_vm.service.SucursalService;
 import jakarta.validation.Valid;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,56 +33,47 @@ public class CitaController {
     private ClienteService clienteService;
     
     @Autowired
+    private ProductoService productoService;
+    
+    @Autowired
     private MessageSource messageSource;
     
     @GetMapping("/listado")
-    public String listado(@RequestParam(required = false) String fecha,
-                          @RequestParam(required = false) String estado,
-                          Model model) {
+    public String listado(Model model) {
+        // Mostrar todas las citas
+        List<Cita> citas = citaService.getCitas();
         
-        LocalDate fechaFiltro;
-        try {
-            fechaFiltro = (fecha != null && !fecha.isEmpty()) ? LocalDate.parse(fecha) : LocalDate.now();
-        } catch (Exception e) {
-            fechaFiltro = LocalDate.now();
-        }
-        
-        List<Cita> citas;
-        
-        if (estado != null && !estado.isEmpty()) {
-            citas = citaService.getCitasPorEstado(estado);
-        } else {
-            citas = citaService.getCitasPorFecha(fechaFiltro);
-        }
-        
-        // Ordenar por fechaHora (ascendente)
-        citas.sort((c1, c2) -> c1.getFechaHora().compareTo(c2.getFechaHora()));
+        // Ordenar por fechaHora (más recientes primero)
+        citas.sort((c1, c2) -> c2.getFechaHora().compareTo(c1.getFechaHora()));
         
         var sucursalesActivas = sucursalService.getSucursales(true);
+        var clientesActivos = clienteService.getClientesActivos();
+        var productosActivos = productoService.getProductos(true);
+        
         var citasPendientes = citaService.getCitasPendientes();
         var citasHoy = citaService.getCitasHoy();
         
         model.addAttribute("citas", citas);
         model.addAttribute("sucursalesActivas", sucursalesActivas);
-        model.addAttribute("fechaFiltro", fechaFiltro);
-        model.addAttribute("estadoFiltro", estado);
+        model.addAttribute("clientesActivos", clientesActivos);
+        model.addAttribute("productosActivos", productosActivos);
         model.addAttribute("totalCitas", citas.size());
         model.addAttribute("citasPendientes", citasPendientes.size());
         model.addAttribute("citasHoy", citasHoy.size());
-        
-        // Para combos de estado
         model.addAttribute("estados", List.of("PENDIENTE", "CONFIRMADA", "COMPLETADA", "CANCELADA"));
         
-        return "/cita/listado";
+        return "cita/listado";
     }
     
     @GetMapping("/formulario")
     public String formulario(Model model) {
         var sucursalesActivas = sucursalService.getSucursales(true);
         var clientesActivos = clienteService.getClientesActivos();
+        var productosActivos = productoService.getProductos(true);
         
         model.addAttribute("sucursalesActivas", sucursalesActivas);
         model.addAttribute("clientesActivos", clientesActivos);
+        model.addAttribute("productosActivos", productosActivos);
         model.addAttribute("cita", new Cita());
         
         return "/cita/formulario";
@@ -121,23 +108,26 @@ public class CitaController {
         return "redirect:/cita/listado";
     }
     
-    @GetMapping("/modificar/{idCita}")
+   @GetMapping("/modificar/{idCita}")
     public String modificar(@PathVariable("idCita") Integer idCita,
-            RedirectAttributes redirectAttributes, Model model) {
+                            Model model, RedirectAttributes redirectAttributes) {
         try {
             Cita cita = citaService.getCita(idCita);
             var sucursalesActivas = sucursalService.getSucursales(true);
             var clientesActivos = clienteService.getClientesActivos();
+            var productosActivos = productoService.getProductos(true);
             
             model.addAttribute("cita", cita);
             model.addAttribute("sucursalesActivas", sucursalesActivas);
             model.addAttribute("clientesActivos", clientesActivos);
+            model.addAttribute("productosActivos", productosActivos);
+            
             model.addAttribute("estados", List.of("PENDIENTE", "CONFIRMADA", "COMPLETADA", "CANCELADA"));
             
-            return "/cita/modifica";
+            return "cita/modifica";
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("Error",
-                    messageSource.getMessage("cita.error01", null, Locale.getDefault()));
+            redirectAttributes.addFlashAttribute("error",
+                    messageSource.getMessage("cita.no_encontrada", null, Locale.getDefault()));
             return "redirect:/cita/listado";
         }
     }

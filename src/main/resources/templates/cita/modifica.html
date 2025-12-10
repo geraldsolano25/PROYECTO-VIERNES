@@ -5,13 +5,214 @@
     <head th:replace="~{general/fragmentos :: head}">
         <title>TechShop - Modificar Cita</title>
         <meta charset="UTF-8"/>
+        <style>
+            .card {
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                border-radius: 10px;
+            }
+            .card-header {
+                border-radius: 10px 10px 0 0 !important;
+            }
+        </style>
     </head>
     <body>
+        <!-- Header -->
         <header th:replace="~{general/fragmentos :: header}"/>
-      
-        <section th:replace="~{cita/fragmentos :: editar}"/>
-        <section th:replace="~{general/fragmentos :: mostrarToast}"/>
         
+        <!-- Contenido principal -->
+        <main class="container-fluid mt-4">
+            <div th:if="${cita != null}">
+                <div class="card">
+                    <div class="card-header bg-warning text-white">
+                        <h4 class="mb-0"><i class="fas fa-edit"></i> Modificar Cita</h4>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/cita/guardar}" method="post" th:object="${cita}" class="needs-validation" novalidate>
+                            <input type="hidden" th:field="*{id}"/>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="fechaHora" class="form-label">Fecha y Hora *</label>
+                                    <input type="datetime-local" class="form-control" id="fechaHora" 
+                                           th:field="*{fechaHora}"
+                                           th:value="${#temporals.format(cita.fechaHora, 'yyyy-MM-dd\'T\'HH:mm')}"
+                                           required/>
+                                    <div class="invalid-feedback">
+                                        La fecha y hora son obligatorias
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="cliente" class="form-label">Cliente *</label>
+                                    <select class="form-select" id="cliente" th:field="*{cliente}" required>
+                                        <option value="">Seleccione cliente</option>
+                                        <!-- SOLO USAR nombre -->
+                                        <option th:each="cliente : ${clientesActivos}"
+                                                th:value="${cliente.nombre}"
+                                                th:text="${cliente.nombre}"
+                                                th:selected="${cita.cliente == cliente.nombre}">
+                                        </option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Seleccione un cliente
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="servicio" class="form-label">Servicio *</label>
+                                    <select class="form-select" id="servicio" th:field="*{servicio}" required>
+                                        <option value="">Seleccione un producto/servicio</option>
+                                        <option th:each="producto : ${productosActivos}"
+                                                th:value="${producto.descripcion}"
+                                                th:text="${producto.descripcion} + ' - $' + ${#numbers.formatDecimal(producto.precio, 0, 2, 'COMMA')}"
+                                                th:selected="${cita.servicio == producto.descripcion}">
+                                        </option>
+                                        <option value="OTRO" th:selected="${cita.servicio != null and !cita.servicio.isEmpty() and !productosActivos.![descripcion].contains(cita.servicio)}">
+                                            Otro servicio (especificar)
+                                        </option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Seleccione un servicio
+                                    </div>
+                                    <input type="text" class="form-control mt-2" id="servicioPersonalizado" 
+                                           th:field="*{servicio}" 
+                                           placeholder="Describa el servicio personalizado"
+                                           style="display: none;"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="sucursal" class="form-label">Sucursal *</label>
+                                    <select class="form-select" id="sucursal" th:field="*{sucursal.id}" required>
+                                        <option value="">Seleccione una sucursal</option>
+                                        <option th:each="sucursal : ${sucursalesActivas}"
+                                                th:value="${sucursal.id}"
+                                                th:text="${sucursal.nombre}"
+                                                th:selected="${cita.sucursal != null and cita.sucursal.id == sucursal.id}">
+                                        </option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Seleccione una sucursal
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <label for="estado" class="form-label">Estado *</label>
+                                    <select class="form-select" id="estado" th:field="*{estado}" required>
+                                        <option value="PENDIENTE">PENDIENTE</option>
+                                        <option value="CONFIRMADA">CONFIRMADA</option>
+                                        <option value="COMPLETADA">COMPLETADA</option>
+                                        <option value="CANCELADA">CANCELADA</option>
+                                    </select>
+                                    <div class="invalid-feedback">
+                                        Seleccione un estado
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between">
+                                <a th:href="@{/cita/listado}" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left"></i> Cancelar
+                                </a>
+                                <button type="submit" class="btn btn-warning">
+                                    <i class="fas fa-save"></i> Guardar Cambios
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div th:if="${cita == null}" class="text-center mt-5">
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle fa-2x"></i>
+                    <h4 class="mt-3">Cita no encontrada</h4>
+                    <p>La cita que intenta modificar no existe o ha sido eliminada.</p>
+                    <a th:href="@{/cita/listado}" class="btn btn-primary mt-2">
+                        <i class="fas fa-arrow-left"></i> Volver al listado
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Toast para mensajes -->
+            <section th:replace="~{general/fragmentos :: mostrarToast}"/>
+            
+        </main>
+        
+        <!-- Footer -->
         <footer th:replace="~{general/fragmentos :: footer}"/>
+        
+        <!-- Scripts -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Validación del formulario
+                const form = document.querySelector('.needs-validation');
+                if (form) {
+                    form.addEventListener('submit', function(event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                }
+                
+                // Validar fecha (no permitir fechas pasadas)
+                const fechaInput = document.getElementById('fechaHora');
+                if (fechaInput) {
+                    const ahora = new Date();
+                    ahora.setMinutes(ahora.getMinutes() - ahora.getTimezoneOffset());
+                    
+                    fechaInput.addEventListener('change', function() {
+                        const fechaSeleccionada = new Date(this.value);
+                        if (fechaSeleccionada < ahora) {
+                            alert('No puede seleccionar una fecha y hora pasadas');
+                            this.value = '';
+                        }
+                    });
+                }
+                
+                // Mostrar mensajes
+                const toastEl = document.getElementById('liveToast');
+                if (toastEl) {
+                    const toast = new bootstrap.Toast(toastEl);
+                    toast.show();
+                }
+                
+                // Manejar selección de servicio personalizado
+                const servicioSelect = document.getElementById('servicio');
+                const servicioPersonalizadoInput = document.getElementById('servicioPersonalizado');
+                
+                if (servicioSelect && servicioPersonalizadoInput) {
+                    // Verificar si el servicio actual no está en la lista de productos
+                    const servicioActual = servicioSelect.value;
+                    let esServicioPersonalizado = true;
+                    
+                    for (let option of servicioSelect.options) {
+                        if (option.value === servicioActual && option.value !== 'OTRO') {
+                            esServicioPersonalizado = false;
+                            break;
+                        }
+                    }
+                    
+                    if (esServicioPersonalizado && servicioActual && servicioActual !== '') {
+                        servicioPersonalizadoInput.style.display = 'block';
+                        servicioPersonalizadoInput.value = servicioActual;
+                    }
+                    
+                    servicioSelect.addEventListener('change', function() {
+                        if (this.value === 'OTRO') {
+                            servicioPersonalizadoInput.style.display = 'block';
+                            servicioPersonalizadoInput.required = true;
+                        } else {
+                            servicioPersonalizadoInput.style.display = 'none';
+                            servicioPersonalizadoInput.required = false;
+                            servicioPersonalizadoInput.value = '';
+                        }
+                    });
+                }
+            });
+        </script>
     </body>
 </html>
