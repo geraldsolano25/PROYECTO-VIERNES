@@ -264,7 +264,7 @@ INSERT INTO constante (atributo,valor) VALUES
 ('url_paypal_success','http://localhost/payment/success');
 
 
-/* estos valores por seguridad deben quedar como variables de entorno 
+/* estos valores por seguridad deben de quedar como variables de entorno 
 ('paypal.client-id','AaDNEUcELb-wQi6_MOboN0a1Ug4BnD4Z2T2-_KIoDjIb8Rif6525nvRhDu-MS-YdKQ8PJqZi7R6T6e_k'),
 ('paypal.client-secret','EKBpJ1oXlwfcp60KyF9ednFM4i9G_RkzgPCpDXo_NbQbaO_bICxhs_a_mnepi7524BQeK_qdNPRmLt71'),
 ('paypal.mode','sandbox'),
